@@ -2,57 +2,439 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LOCAÇÃO / OS — Antecipar aluguéis</title>
+<meta name="description" content="Arquitetura interativa 3D do LOCAÇÃO OS: aplicações, assinaturas, conciliação e provas digitais. Implementação de homologação e dependências futuras claramente separadas.">
+<title>LOCAÇÃO / OS — Arquitetura 3D</title>
 <style>
-:root{color-scheme:dark;--bg:#101916;--panel:#16211b;--ink:#e7ece7;--muted:#adbdb2;--line:#35483c;--green:#b6efc5;--sand:#dfc59b;--blue:#9dc8ec;--purple:#c6b9ef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px 'Trebuchet MS',sans-serif}button,a,input{font:inherit}button{cursor:pointer;color:inherit;background:transparent;border:1px solid var(--line);padding:10px 12px}button:hover,button[aria-pressed=true]{background:#2a4031;border-color:var(--green)}button:focus-visible,a:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:3px}a{color:var(--green)}header,main,footer{max-width:1560px;margin:auto;padding:22px 28px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:12px}.mono,.eyebrow{font:11px Consolas,monospace;letter-spacing:.06em;color:var(--muted)}.brand{letter-spacing:.15em;font:14px Consolas,monospace}.intro{display:flex;justify-content:space-between;gap:24px;align-items:end;margin:8px 0 24px}h1{font-weight:400;font-size:clamp(30px,4vw,52px);margin:10px 0 12px;letter-spacing:-.035em}.intro p{max-width:700px;color:var(--muted);line-height:1.65;margin:0}.scope{display:flex;gap:7px;flex-wrap:wrap;max-width:320px}.scope span{border:1px solid var(--line);padding:8px;font:11px Consolas,monospace}.workspace{display:grid;grid-template-columns:195px minmax(0,1fr) 320px;border:1px solid var(--line)}nav{padding:20px 14px;border-right:1px solid var(--line)}nav h2{font:10px Consolas,monospace;color:var(--muted);margin:0 0 18px}#steps{display:grid;gap:8px}.step{text-align:left;display:grid;grid-template-columns:23px 1fr;gap:6px;line-height:1.45;font-size:12px}.step span{color:var(--green);font:11px Consolas,monospace}.nav-note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:24px}.scene{min-width:0;display:flex;flex-direction:column}.scene-head{padding:16px 18px;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);font:10px Consolas,monospace;color:var(--muted)}.tools{display:flex;gap:6px;padding:12px 16px;flex-wrap:wrap}.tools button{padding:7px 10px;font-size:11px}.plot{height:620px;position:relative;min-width:0;background:radial-gradient(ellipse at 50% 45%,#1c3024 0%,#101916 75%)}canvas{width:100%;height:100%;display:block;touch-action:pan-y}.hint{padding:10px 18px 18px;font-size:11px;line-height:1.6;color:var(--muted);margin:0}.inspector{padding:22px;border-left:1px solid var(--line);background:var(--panel);min-width:0}.inspector h2{font-size:26px;font-weight:400;margin:12px 0 18px;line-height:1.15}.inspector p{line-height:1.65}.app{border-block:1px solid var(--line);padding:14px 0;margin-bottom:18px}.app strong{display:block;margin:8px 0;font-size:15px}.app small{line-height:1.5;color:var(--muted)}dl{margin:0}dt{font:10px Consolas,monospace;color:var(--muted);margin-top:20px;text-transform:uppercase}dd{margin:7px 0 0;line-height:1.65;font-size:12px}.limit{border-left:2px solid var(--sand);padding-left:12px;margin-top:22px;color:var(--sand);font-size:12px}.gate{padding:16px 20px;border:1px solid var(--line);border-top:0;line-height:1.7;font-size:12px}.gate strong{color:var(--sand)}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px}.bottom section{border-top:1px solid var(--line);padding-top:16px}.bottom h2{font-weight:400;font-size:20px;margin:8px 0 14px}.bottom p,.bottom li{font-size:13px;line-height:1.75;color:var(--muted)}.bottom ul{padding-left:19px}.bottom strong{color:var(--ink)}details{border-top:1px solid var(--line);margin-top:22px;padding-top:15px}summary{cursor:pointer;color:var(--sand);line-height:1.5}details p{max-width:1000px;font-size:12px;line-height:1.75;color:var(--muted)}footer{border-top:1px solid var(--line);margin-top:28px;color:var(--muted);font:10px Consolas,monospace;display:flex;justify-content:space-between;gap:20px}.skip{position:absolute;left:10px;top:-60px}.skip:focus{top:10px;background:var(--bg);padding:10px;z-index:5}@media(max-width:1150px){.workspace{grid-template-columns:165px minmax(0,1fr)}.inspector{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.inspector dl{display:grid;grid-template-columns:160px 1fr;gap:10px}.inspector dt,.inspector dd{margin:0}.plot{height:590px}.intro{align-items:start;flex-direction:column}.scope{max-width:none}}@media(max-width:650px){header,main,footer{padding:18px 14px}header{font-size:11px}.workspace{display:block}nav{border-right:0;border-bottom:1px solid var(--line);padding:16px 12px}#steps{grid-template-columns:1fr 1fr}.nav-note{margin:12px 0 0}.plot{height:590px}.scene-head{padding:14px 12px}.tools{padding:10px 12px}.inspector{padding:20px 16px}.inspector dl{display:block}.inspector dt{margin-top:16px}.inspector dd{margin-top:6px}.bottom{grid-template-columns:1fr}.intro{gap:16px;margin-top:0}.hint{padding-inline:12px}footer{flex-direction:column}.gate{padding:14px}.brand{font-size:12px}}
+:root{color-scheme:dark;--bg:#0c1512;--panel:#111e18;--ink:#eef3ed;--muted:#a8b9ad;--line:#2b4033;--green:#b8edc5;--sand:#e2c699;--blue:#9ecce8;--purple:#c1b6ef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px 'Trebuchet MS',sans-serif}button,input,a{font:inherit}button{cursor:pointer;color:inherit;background:transparent;border:1px solid var(--line);padding:10px 12px;line-height:1.4}button:hover,button[aria-pressed=true]{background:#253e2d;border-color:#8eaf96}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:3px}a{color:var(--green)}header{padding:20px 28px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font:17px Georgia,serif;letter-spacing:.08em;white-space:nowrap}.brand b{color:var(--green);font-weight:400}.header-right{display:flex;align-items:center;gap:20px}.eyebrow,.mono{font:10px Consolas,monospace;letter-spacing:.12em;color:var(--muted);line-height:1.7}.header-right a{font-size:12px}main{max-width:1920px;margin:auto;padding:0 24px}.intro{display:flex;align-items:end;justify-content:space-between;gap:28px;padding:30px 4px 26px}h1{font:400 clamp(32px,3.2vw,52px)/1.08 Georgia,serif;letter-spacing:-.025em;margin:10px 0 0}h1 span{color:var(--green)}.intro-side{max-width:410px}.intro p{color:var(--muted);font-size:13px;line-height:1.65;margin:0 0 12px}.tag{display:inline-block;border:1px solid var(--line);padding:5px 8px;font:10px Consolas,monospace;color:var(--green);margin-right:5px}.workspace{display:grid;grid-template-columns:184px minmax(0,1fr) 294px;border:1px solid var(--line);background:var(--panel)}nav{border-right:1px solid var(--line);padding:20px 13px;min-width:0}nav h2{font:10px Consolas,monospace;letter-spacing:.1em;color:var(--muted);margin:0 0 14px}.nav-section+ .nav-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}#flow-buttons,#node-list{display:grid;gap:6px}#flow-buttons button,#node-list button{text-align:left;font-size:12px;padding:9px;border-color:transparent}#flow-buttons button[aria-pressed=true],#node-list button[aria-pressed=true]{border-color:#728d78}#node-list{max-height:245px;overflow-y:auto;margin-top:10px}#node-list button{display:flex;align-items:center;gap:8px}#node-list img{width:20px;height:20px;object-fit:contain}#search{width:100%;background:#0c1512;border:1px solid var(--line);color:var(--ink);padding:10px;font-size:12px}#layer-filters{display:grid;gap:12px;font-size:11px;color:var(--muted)}#layer-filters label{display:flex;gap:7px;align-items:center;line-height:1.5}input[type=checkbox]{accent-color:var(--green)}.scene{min-width:0;display:flex;flex-direction:column;background:#0e1914}.scene-head{display:flex;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);font:10px Consolas,monospace;letter-spacing:.07em;color:var(--green)}.plot{height:690px;position:relative;min-width:0;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#192d20 0%,#0e1914 74%)}canvas{display:block;width:100%;height:100%;touch-action:pan-y}.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:7px;border-top:1px solid var(--line);padding:12px 16px}.toolbar button{font-size:11px;padding:8px 10px}.toolbar .spacer{flex:1}.scene-caption{padding:0 18px 14px;font-size:11px;line-height:1.7;color:var(--muted);margin:0}.inspector{padding:22px 20px;border-left:1px solid var(--line);min-width:0;overflow-wrap:anywhere}.inspector-heading{display:flex;align-items:center;gap:12px;margin:18px 0}.inspector-heading img{width:40px;height:40px;object-fit:contain}.inspector-heading img[hidden]{display:none}.inspector h2{font:400 27px/1.12 Georgia,serif;margin:0}.inspector #detail-stack{font-size:12px;color:var(--green);line-height:1.7;margin:14px 0}.inspector p{font-size:13px;line-height:1.7;color:var(--muted)}.inspector h3{font:10px Consolas,monospace;letter-spacing:.06em;color:var(--muted);margin:24px 0 8px}.inspector #detail-status{display:inline-block;padding:5px 8px;border:1px solid var(--line);color:var(--green);font:10px Consolas,monospace}#detail-limit{border-left:2px solid var(--sand);padding-left:12px;color:var(--sand);font-size:12px}#detail-links{display:grid;gap:6px}#detail-links button{text-align:left;font-size:11px;line-height:1.55}.legend{display:flex;gap:20px;flex-wrap:wrap;padding:15px 20px;border:1px solid var(--line);border-top:0;font:10px Consolas,monospace;color:var(--muted)}.legend b{color:var(--green)}.notes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;padding:30px 4px}.notes article{border-top:1px solid var(--line);padding-top:18px}.notes h2{font:400 23px Georgia,serif;margin:9px 0 13px}.notes p{font-size:13px;line-height:1.75;color:var(--muted)}.notes strong{color:var(--ink)}.cash{display:flex;gap:22px;flex-wrap:wrap}.cash strong{display:block;font:25px Georgia,serif;color:var(--green)}.cash small{font-size:11px;color:var(--muted)}details{border-top:1px solid var(--line);padding:20px 4px}summary{cursor:pointer;color:var(--sand);font-size:12px}details p{max-width:1100px;font-size:12px;color:var(--muted);line-height:1.8}footer{padding:22px 28px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font:10px Consolas,monospace;color:var(--muted);line-height:1.8}.skip{position:absolute;top:-80px;left:20px}.skip:focus{top:10px;background:var(--bg);padding:12px;z-index:5}#download-status{font-size:11px;color:var(--sand)}.present header,.present .intro,.present .notes,.present details,.present footer{display:none}.present main{padding:0;max-width:none}.present .plot{height:calc(100dvh - 164px);min-height:480px}.present .workspace{border-top:0}.present .inspector{max-height:calc(100dvh - 48px);overflow:auto}.present nav{max-height:calc(100dvh - 48px);overflow:auto}@media(min-width:1650px){.workspace{grid-template-columns:200px minmax(0,1fr) 330px}.plot{height:740px}}@media(max-width:1100px){.workspace{grid-template-columns:170px minmax(0,1fr)}.inspector{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:0 28px}.inspector-heading{grid-column:1/-1}.intro-side{max-width:330px}.notes{gap:16px}.present .inspector{max-height:none}.present .plot{height:650px}}@media(max-width:650px){header{padding:16px;gap:10px}.header-right .mono{display:none}.header-right{gap:8px}main{padding:0 12px}.intro{display:block;padding:24px 3px}.intro-side{max-width:none;margin-top:18px}.workspace{display:block}nav{border:0;border-bottom:1px solid var(--line);padding:14px}.nav-section+.nav-section{margin-top:14px;padding-top:14px}#flow-buttons{grid-template-columns:1fr 1fr}#layer-filters{grid-template-columns:1fr 1fr;gap:8px}#node-list{max-height:145px;grid-template-columns:1fr 1fr}.scene-head{padding:14px 12px;font-size:9px}.plot{height:690px}.toolbar{padding:10px}.toolbar .spacer{display:none}.inspector{display:block;padding:22px 18px}.legend{padding:13px;gap:10px}.notes{grid-template-columns:1fr;padding:24px 3px}.notes article{padding-top:16px}footer{padding:18px;display:block}footer span{display:block;margin-bottom:8px}.present nav{display:none}.present .plot{height:70dvh;min-height:540px}.present .inspector{max-height:none}.brand{font-size:14px}}
+.node-item{display:block!important}.node-item small{display:block;font-size:10px;color:var(--muted);line-height:1.5;margin-top:3px}.node-item.muted{opacity:.58}
 </style>
 </head>
 <body>
-<a class="skip" href="#architecture">Ir para a operação</a>
-<header><div class="brand">LOCAÇÃO / OS</div><div class="mono">INTELLISYS · UNIÃO / PROPOSTA</div><a href="./index.html" download="locacao-os.html">Baixar HTML</a></header>
+<a href="#architecture" class="skip">Ir para a arquitetura</a>
+<header><div class="brand">◇ LOCAÇÃO <b>/ OS</b></div><div class="header-right"><span class="mono">ARQUITETURA ATUAL · 29 SET 2026</span><button id="download">Baixar apresentação ↓</button><span id="download-status" role="status"></span></div></header>
 <main>
-<section class="intro"><div><div class="eyebrow">TOKENIZAÇÃO DE RECEBÍVEIS / WHITE-LABEL</div><h1>Antecipar aluguéis.</h1><p>A imobiliária oferece. O proprietário autoriza. O parceiro compra os recebíveis. O token registra os direitos adquiridos.</p></div><div class="scope"><span>Um parceiro comprador</span><span>Sem oferta pública inicial</span><span>Sem marketplace ou revenda</span></div></section>
-<section class="workspace" id="architecture" aria-label="Operação de antecipação de aluguéis">
-<nav aria-label="Etapas da operação"><h2>01 / PERCORRER A OPERAÇÃO</h2><div id="steps"></div><p class="nav-note">Cliente do software: <strong>imobiliária</strong>.<br>Titular do aluguel: <strong>proprietário ou titular verificado</strong>.<br>Comprador: <strong>parceiro a contratar</strong>.</p></nav>
-<div class="scene"><div class="scene-head"><span id="view-label">FLUXO DA OPERAÇÃO / 3D</span><span>6 ETAPAS</span></div><div class="tools"><button id="flat" aria-pressed="false">Vista 2D</button><button id="reset">Recentrar</button><button id="zoom-in" aria-label="Aumentar zoom">+</button><button id="zoom-out" aria-label="Diminuir zoom">−</button><button id="open-detail">Ler etapa selecionada</button></div><div class="plot"><canvas id="map" tabindex="0" role="img" aria-label="Diagrama 3D de seis etapas da antecipação. Use a lista de etapas ou as setas do teclado para explorar."></canvas></div><p class="hint">Clique em um bloco para ver aplicação, responsável e dependência. No desktop, arraste para girar. No celular, use a lista de etapas ou a vista 2D. APP = software proposto, não integração já disponível.</p></div>
-<aside class="inspector" aria-labelledby="detail-title"><div class="eyebrow" id="detail-step"></div><h2 id="detail-title" tabindex="-1"></h2><div class="app"><span class="eyebrow">QUAL APLICAÇÃO?</span><strong id="detail-app"></strong><small id="detail-status"></small></div><p id="detail-description"></p><dl><dt>Responsável</dt><dd id="detail-owner"></dd><dt>Entrada</dt><dd id="detail-input"></dd><dt>Entrega</dt><dd id="detail-output"></dd><dt>Depende de</dt><dd id="detail-dependency"></dd></dl><p class="limit" id="detail-limit"></p></aside>
+<section class="intro"><div><div class="eyebrow">ARQUITETURA 002 / OPERAÇÃO CONECTADA</div><h1>Uma operação.<br><span>Todos os componentes à vista.</span></h1></div><div class="intro-side"><p>Do contrato às provas de assinatura, do recebimento à apuração. Explore as aplicações, os dados e as conexões que sustentam o LOCAÇÃO OS.</p><span class="tag">PILOTO PRIVADO</span><span class="tag">SEM REPASSES REAIS</span></div></section>
+<section class="workspace" id="architecture" aria-label="Arquitetura tridimensional interativa">
+<nav aria-label="Explorar arquitetura"><section class="nav-section"><h2>01 / EXPLORAR FLUXOS</h2><div id="flow-buttons"></div></section><section class="nav-section"><h2>CAMADAS DO SISTEMA</h2><div id="layer-filters"></div></section><section class="nav-section"><h2>LOCALIZAR COMPONENTE</h2><input id="search" aria-label="Buscar componente" placeholder="Nome ou tecnologia…"><div id="node-list"></div></section></nav>
+<div class="scene"><div class="scene-head"><span id="scene-title">ARQUITETURA / VISÃO COMPLETA</span><span id="node-count"></span></div><div class="plot"><canvas id="map" tabindex="0" role="img" aria-label="Mapa 3D dos componentes. Arraste para girar, clique para inspecionar ou use as setas do teclado. A lista oferece os mesmos componentes."></canvas></div><div class="toolbar"><button id="zoom-in" aria-label="Aumentar zoom">+</button><button id="zoom-out" aria-label="Diminuir zoom">−</button><button id="reset">Recentrar</button><button id="flat" aria-pressed="false">Vista 2D</button><button id="play" aria-pressed="false">Animar fluxos</button><span class="spacer"></span><button id="present" aria-pressed="false">Modo apresentação</button><button id="open-detail">Ler componente</button></div><p id="scene-caption" class="scene-caption">Arraste para girar · clique para inspecionar · logos identificam tecnologias, não parceria comercial.</p></div>
+<aside class="inspector" aria-label="Ficha do componente"><div class="eyebrow">02 / INSPECIONAR COMPONENTE</div><div class="inspector-heading"><img id="detail-logo" alt="" hidden><h2 id="detail-title" tabindex="-1"></h2></div><span id="detail-status"></span><div id="detail-stack"></div><p id="detail-description"></p><h3>RESPONSÁVEL / ESCOPO</h3><p id="detail-owner"></p><h3>LIMITE DE CONFIANÇA</h3><p id="detail-limit"></p><h3>CONEXÕES DO COMPONENTE</h3><div id="detail-links"></div></aside>
 </section>
-<div class="gate"><strong>Antes de operar:</strong> parceiro comprador contratado + estrutura jurídica validada + integração autorizada pela União. Um comprador e acesso restrito não garantem exclusão da CVM. Este diagrama é uma proposta, não uma operação financeira ativa.</div>
-<div class="bottom"><section><div class="eyebrow">RECEITA DO PRODUTO</div><h2>Software + operação.</h2><p><strong>Mensalidade das imobiliárias</strong> pelo módulo de antecipação.<br><strong>Remuneração por operação</strong>, somente no formato permitido pela estrutura jurídica e pelos contratos.</p><p>Preço, volume financiável e margem ainda precisam de validação.</p></section><section><div class="eyebrow">DEPENDÊNCIAS ESSENCIAIS</div><h2>O que precisa existir.</h2><ul><li><strong>União / Intellisys:</strong> acesso técnico, comercial e aos dados necessários.</li><li><strong>Parceiro comprador:</strong> capital, critérios, proposta e aceitação dos tokens.</li><li><strong>Jurídico:</strong> cessão válida, enquadramento e responsabilidades.</li><li><strong>Operação técnica:</strong> assinatura, pagamentos, conciliação e chaves.</li></ul></section></div>
-<details><summary>Riscos que não desaparecem com o token</summary><p><strong>Direito jurídico:</strong> administrar o imóvel não autoriza a imobiliária a vender o aluguel; verificar titularidade, poderes e cessões anteriores. <strong>Fluxo financeiro:</strong> atraso, rescisão ou disputa podem afetar o recebível; definir quem suporta a perda. <strong>Concentração:</strong> se o parceiro parar de comprar, novas antecipações param. <strong>Tecnologia:</strong> Pix e Solana não liquidam automaticamente de forma atômica; erros exigem conciliação e correção autorizada. <strong>Privacidade:</strong> documentos e dados pessoais ficam fora da blockchain.</p><p>Referência regulatória: <a href="https://conteudo.cvm.gov.br/cvm_institucional/export/sites/cvm/legislacao/pareceres-orientacao/anexos/Pare040.pdf" target="_blank" rel="noopener noreferrer">Parecer de Orientação CVM 40</a>. A estrutura concreta requer análise jurídica atualizada.</p></details>
-<noscript><p>Ative JavaScript para explorar o diagrama. Fluxo: envio pela imobiliária → autorização do proprietário → proposta do parceiro → cessão e pagamento → registro do token → conciliação dos aluguéis.</p></noscript>
-</main><footer><span>LOCAÇÃO / OS · UM PRODUTO, SEIS ETAPAS</span><span>ARQUITETURA PROPOSTA · SEM EMISSÃO OU MOVIMENTAÇÃO FINANCEIRA NESTA PÁGINA</span></footer>
+<div class="legend"><span><b>Setas</b> · relações implementadas no piloto</span><span><b>Contorno tracejado</b> · componente futuro, desconectado</span><span>Sandbox / localnet ≠ produção</span><span>Mapa estático · não monitora disponibilidade ao vivo</span></div>
+<section class="notes"><article><div class="eyebrow">01 / VALOR PARA A IMOBILIÁRIA</div><h2>A operação tem um centro.</h2><p>A equipe conduz as etapas em um só lugar: documentos, responsáveis, conciliação e remuneração. <strong>Intellisys continua uma integração futura.</strong> Proprietário e comprador não recebem acesso interno da agência como substituto de um portal próprio.</p></article><article><div class="eyebrow">02 / EXEMPLO CONCILIADO EM TESTE</div><h2>Apuração não é repasse.</h2><div class="cash"><div><strong>R$ 5,94</strong><small>Direito da imobiliária</small></div><div><strong>R$ 291,09</strong><small>Direito do comprador</small></div></div><p>R$ 300,00 brutos − R$ 2,97 de tarifas. Taxa de 2%, arredondada por parcela. Antecipação de referência: R$ 270,00. <strong>Nenhuma transferência executada pela aplicação.</strong> Fotografia de uma demo fictícia, não promessa de retorno.</p></article><article><div class="eyebrow">03 / PAPEL REAL DO TOKEN</div><h2>Prova técnica, não caixa.</h2><p>Token-2022 não transferível em uma rede privada de testes. O backend verifica a carteira antes de novas instruções. <strong>Os direitos apurados ficam no ledger da aplicação.</strong> O token não executa repasses, não muda com o saldo da dívida e não substitui o instrumento jurídico.</p></article></section>
+<details><summary>Dependências comerciais, jurídicas e operacionais</summary><p>Antes de dinheiro real: comprador contratado, capital, critérios de risco, direitos e cessão juridicamente válidos, termos assinados coerentes com os registros, integração autorizada pela União, identidade e acesso dos participantes, arranjo de pagamentos e operação estável. A reserva de recebíveis é local à agência, ao hash do documento e ao vencimento: não é um registro global contra cessões externas. Um comprador e acesso restrito não garantem exclusão de regulação.</p><p>O backup da aplicação cobre SQLite e documentos. Documenso/PostgreSQL, ledger Solana e segredos precisam de proteção e recuperação próprias. Túneis e serviços de homologação dependem de disponibilidade; o diagrama descreve a arquitetura, não o estado ao vivo. Logos: <a href="https://simpleicons.org/" target="_blank" rel="noopener noreferrer">Simple Icons</a>, <a href="https://documenso.com/" target="_blank" rel="noopener noreferrer">Documenso</a> e <a href="https://www.asaas.com/" target="_blank" rel="noopener noreferrer">Asaas</a>. Identificação tecnológica não significa endosso ou parceria.</p></details>
+<noscript><p>Ative JavaScript para explorar o mapa. React → API Express/Node → SQLite e documentos privados. A API integra Documenso/PostgreSQL, Asaas Sandbox e Solana localnet. Não há repasses reais, portal externo ou conexão Intellisys implementados.</p></noscript>
+</main>
+<footer><span>LOCAÇÃO / OS · ARQUITETURA IMPLEMENTADA + DEPENDÊNCIAS EXPLÍCITAS</span><span>29/09/2026 · APRESENTAÇÃO SEM DADOS PRIVADOS · HOMOLOGAÇÃO</span></footer>
 <script>
-'use strict';
-const steps=[
-{id:'agency',title:'Imobiliária envia',app:'Módulo no Intellisys',shortApp:'Intellisys',status:'Interface white-label proposta; integração depende da União.',description:'A imobiliária seleciona o contrato e as parcelas que o proprietário pretende antecipar. Ainda não existe cessão nem token emitido.',owner:'Imobiliária autorizada a administrar a locação.',input:'Contrato, parcelas, titular e histórico financeiro necessário.',output:'Solicitação de antecipação com referências aos documentos.',dependency:'Permissão comercial e técnica da União; acesso autorizado aos dados.',limit:'A imobiliária é cliente do software. Isso não a torna dona dos aluguéis.',x:-185,y:-190,z:-45,color:'#dfc59b'},
-{id:'owner',title:'Proprietário autoriza',app:'Portal + assinatura eletrônica',shortApp:'Portal + assinatura',status:'Fluxo proposto; fornecedor de assinatura a selecionar.',description:'O titular autoriza a análise e o compartilhamento necessário. A aceitação da proposta e a assinatura da cessão acontecem depois.',owner:'Titular verificado do recebível ou representante com poderes.',input:'Solicitação, direitos identificados e finalidade do compartilhamento.',output:'Autorização documentada para encaminhar a operação ao parceiro.',dependency:'Verificação de poderes, base legal de dados e documentos válidos.',limit:'Autorizar análise não é vender o recebível. A cessão exige formalização própria.',x:185,y:-190,z:45,color:'#dfc59b'},
-{id:'buyer',title:'Parceiro faz proposta',app:'Sistema do parceiro + conector',shortApp:'Parceiro + conector',status:'Um comprador inicial; parceiro e integração ainda não contratados.',description:'O parceiro analisa o contrato e oferece valor líquido, desconto, prazo e condições. O proprietário decide se aceita.',owner:'Parceiro comprador, no enquadramento aplicável à sua atuação.',input:'Dossiê autorizado, contrato e parcelas elegíveis.',output:'Proposta identificada, aceita, recusada ou expirada.',dependency:'Capital disponível, critérios de risco e aceitação da estrutura tokenizada.',limit:'Sem investidor público, leilão ou marketplace neste recorte. Aprovação não é garantida.',x:185,y:0,z:-45,color:'#b6efc5'},
-{id:'assignment',title:'Cessão e pagamento',app:'Backend + assinatura + parceiro',shortApp:'Backend + parceiro',status:'Backend modular proposto; dinheiro fora do caixa da plataforma.',description:'As partes formalizam a venda dos recebíveis. O parceiro paga ao proprietário pelo arranjo definido, com evidência conciliável.',owner:'Proprietário cedente e parceiro comprador; demais participantes conforme instrumento.',input:'Proposta aceita, direitos delimitados e instrumentos assinados.',output:'Cessão formalizada e confirmação do pagamento, ou exceção a resolver.',dependency:'Enquadramento jurídico, validade da cessão e comunicação ao devedor quando aplicável.',limit:'Não presumir pagamento, aprovação da CVM ou inexistência de cessões anteriores. Tratar falhas antes de avançar.',x:-185,y:0,z:45,color:'#b6efc5'},
-{id:'token',title:'Token registra direitos',app:'Programa na Solana + backend',shortApp:'Solana + backend',status:'Programa e controle de chaves a implementar e revisar.',description:'O token representa os recebíveis adquiridos pelo parceiro, vinculados ao instrumento jurídico. Não representa a propriedade do imóvel.',owner:'Emissor e autoridades técnicas definidos na estrutura jurídica.',input:'Cessão válida e condições de emissão verificadas, incluindo o pagamento previsto.',output:'Posição digital vinculada às parcelas, ao titular e ao instrumento.',dependency:'Reconciliação jurídica e operacional; identificação técnica, chaves e revisão de segurança.',limit:'Movimentação restrita aos participantes autorizados. Sem revenda inicial; dados pessoais e documentos fora da blockchain.',x:-185,y:190,z:-45,color:'#c6b9ef'},
-{id:'settlement',title:'Aluguéis e baixa',app:'Backend de conciliação + Solana',shortApp:'Conciliação + Solana',status:'Fontes de pagamento e regras de atualização ainda a integrar.',description:'O inquilino continua pagando em reais. Recebimentos conciliados seguem a destinação contratada e atualizam a posição até a baixa.',owner:'Responsáveis pela cobrança, repasse e atualização definidos no contrato.',input:'Pagamentos efetivos, atrasos, rescisões e correções autorizadas.',output:'Saldo e situação atualizados; baixa após quitação verificada.',dependency:'Dados bancários confiáveis, cobrança, repasses e tratamento de exceções.',limit:'Token não garante recebimento. Atraso ou rescisão não viram quitação automática; Pix e Solana precisam ser conciliados.',x:185,y:190,z:45,color:'#c6b9ef'}
-];
-const verbs=['autoriza','encaminha','aceita e formaliza','registra','acompanha'];
-const $=id=>document.getElementById(id),canvas=$('map'),ctx=canvas.getContext('2d');
-let selected=0,flat=false,yaw=.18,pitch=.13,zoom=1,width=0,height=0,projected=[],drag=null;
-$('steps').innerHTML=steps.map((s,i)=>`<button class="step" data-step="${i}" aria-pressed="${i===0}"><span>0${i+1}</span>${s.title}</button>`).join('');
-function select(i){selected=(i+steps.length)%steps.length;const s=steps[selected];$('detail-step').textContent=`ETAPA 0${selected+1} / 06`;$('detail-title').textContent=s.title;for(const key of ['app','status','description','owner','input','output','dependency','limit'])$('detail-'+key).textContent=s[key];document.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.step===selected)));draw();}
-function project(n){const a=flat?0:yaw,p=flat?0:pitch,x=n.x*Math.cos(a)-n.z*Math.sin(a),z=n.x*Math.sin(a)+n.z*Math.cos(a),y=n.y*Math.cos(p)-z*Math.sin(p),depth=n.y*Math.sin(p)+z*Math.cos(p),perspective=flat?1:1000/(1000+depth);return{x:width/2+x*Math.min(width/670,1.35)*zoom*perspective,y:height/2+y*(height/650)*zoom*perspective,depth};}
-function wrap(text,max){const out=[''];for(const word of text.split(' ')){const last=out.length-1,next=out[last]?out[last]+' '+word:word;if(ctx.measureText(next).width>max&&out[last])out.push(word);else out[last]=next;}return out;}
-function draw(){if(!width||!height)return;ctx.clearRect(0,0,width,height);const cardW=Math.min(176,width*.405),cardH=100;
- for(const [y,color] of [[-190,'#dfc59b'],[0,'#b6efc5'],[190,'#c6b9ef']]){const corners=[[-285,-110],[285,-110],[285,110],[-285,110]].map(([x,z])=>project({x,y:y+45,z}));ctx.beginPath();corners.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=color+'06';ctx.fill();ctx.strokeStyle=color+'25';ctx.stroke();}
- projected=steps.map((s,i)=>({...project(s),i,w:cardW,h:cardH}));
- for(let i=0;i<projected.length-1;i++){const a=projected[i],b=projected[i+1],dx=b.x-a.x,dy=b.y-a.y;const boundary=p=>1/Math.max(Math.abs(dx)/(p.w/2+5),Math.abs(dy)/(p.h/2+5));const ta=boundary(a),tb=boundary(b),sx=a.x+dx*ta,sy=a.y+dy*ta,ex=b.x-dx*tb,ey=b.y-dy*tb,angle=Math.atan2(ey-sy,ex-sx);ctx.strokeStyle='#7fa58b';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(ex,ey);ctx.stroke();ctx.fillStyle='#9bc5a7';ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(ex-7*Math.cos(angle-.45),ey-7*Math.sin(angle-.45));ctx.lineTo(ex-7*Math.cos(angle+.45),ey-7*Math.sin(angle+.45));ctx.closePath();ctx.fill();if(Math.abs(dx)>Math.abs(dy)&&width>450){ctx.font='10px Consolas,monospace';const label=verbs[i],tw=ctx.measureText(label).width,mx=(sx+ex)/2,my=(sy+ey)/2-12;ctx.fillStyle='#101916';ctx.fillRect(mx-tw/2-4,my-10,tw+8,15);ctx.textAlign='center';ctx.fillStyle='#b6efc5';ctx.fillText(label,mx,my);}}
- for(const p of [...projected].sort((a,b)=>b.depth-a.depth)){const s=steps[p.i],x=p.x-p.w/2,y=p.y-p.h/2;ctx.fillStyle=p.i===selected?'#2a4031':'#17221c';ctx.strokeStyle=p.i===selected?'#d7f7db':s.color+'aa';ctx.lineWidth=p.i===selected?2:1;ctx.fillRect(x,y,p.w,p.h);ctx.strokeRect(x,y,p.w,p.h);ctx.textAlign='left';ctx.font='10px Consolas,monospace';ctx.fillStyle=s.color;ctx.fillText(`0${p.i+1} / ${p.i<2?'PEDIDO':p.i<4?'OPERAÇÃO':'WEB3'}`,x+10,y+18);ctx.font='13px "Trebuchet MS",sans-serif';ctx.fillStyle='#edf3ed';wrap(s.title,p.w-20).forEach((line,j)=>ctx.fillText(line,x+10,y+41+j*16));ctx.font='9px Consolas,monospace';ctx.fillStyle='#b6efc5';wrap('APP · '+s.shortApp,p.w-18).forEach((line,j)=>ctx.fillText(line,x+9,y+78+j*12));}}
-function resize(){const r=canvas.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
-$('steps').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(b)select(+b.dataset.step);});
-$('flat').onclick=()=>{flat=!flat;$('flat').setAttribute('aria-pressed',String(flat));$('flat').textContent=flat?'Voltar ao 3D':'Vista 2D';$('view-label').textContent='FLUXO DA OPERAÇÃO / '+(flat?'2D':'3D');draw();};
-$('reset').onclick=()=>{yaw=.18;pitch=.13;zoom=1;draw();};$('zoom-in').onclick=()=>{zoom=Math.min(1.2,zoom+.1);draw();};$('zoom-out').onclick=()=>{zoom=Math.max(.7,zoom-.1);draw();};
-$('open-detail').onclick=()=>{$('detail-title').scrollIntoView({block:'start'});$('detail-title').focus({preventScroll:true});};
-canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag={x:e.clientX,y:e.clientY,yaw,pitch,moved:false};canvas.setPointerCapture(e.pointerId);});
-canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>5)drag.moved=true;if(!flat&&drag.moved){yaw=Math.max(-.5,Math.min(.5,drag.yaw+dx*.003));pitch=Math.max(-.25,Math.min(.25,drag.pitch+dy*.002));draw();}});
-canvas.addEventListener('pointerup',e=>{if(!drag)return;if(!drag.moved){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,hit=[...projected].sort((a,b)=>a.depth-b.depth).find(p=>Math.abs(x-p.x)<=p.w/2&&Math.abs(y-p.y)<=p.h/2);if(hit)select(hit.i);}drag=null;});canvas.addEventListener('pointercancel',()=>drag=null);
-canvas.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp','Home','End'].includes(e.key)){e.preventDefault();select(e.key==='Home'?0:e.key==='End'?5:selected+(['ArrowRight','ArrowDown'].includes(e.key)?1:-1));}});
-new ResizeObserver(resize).observe(canvas.parentElement);select(0);resize();
+const LOGOS = {"react": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNjFEQUZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UmVhY3Q8L3RpdGxlPjxwYXRoIGQ9Ik0xNC4yMyAxMi4wMDRhMi4yMzYgMi4yMzYgMCAwIDEtMi4yMzUgMi4yMzYgMi4yMzYgMi4yMzYgMCAwIDEtMi4yMzYtMi4yMzYgMi4yMzYgMi4yMzYgMCAwIDEgMi4yMzUtMi4yMzYgMi4yMzYgMi4yMzYgMCAwIDEgMi4yMzYgMi4yMzZ6bTIuNjQ4LTEwLjY5Yy0xLjM0NiAwLTMuMTA3Ljk2LTQuODg4IDIuNjIyLTEuNzgtMS42NTMtMy41NDItMi42MDItNC44ODctMi42MDItLjQxIDAtLjc4My4wOTMtMS4xMDYuMjc4LTEuMzc1Ljc5My0xLjY4MyAzLjI2NC0uOTczIDYuMzY1QzEuOTggOC45MTcgMCAxMC40MiAwIDEyLjAwNGMwIDEuNTkgMS45OSAzLjA5NyA1LjA0MyA0LjAzLS43MDQgMy4xMTMtLjM5IDUuNTg4Ljk4OCA2LjM4LjMyLjE4Ny42OS4yNzUgMS4xMDIuMjc1IDEuMzQ1IDAgMy4xMDctLjk2IDQuODg4LTIuNjI0IDEuNzggMS42NTQgMy41NDIgMi42MDMgNC44ODcgMi42MDMuNDEgMCAuNzgzLS4wOSAxLjEwNi0uMjc1IDEuMzc0LS43OTIgMS42ODMtMy4yNjMuOTczLTYuMzY1QzIyLjAyIDE1LjA5NiAyNCAxMy41OSAyNCAxMi4wMDRjMC0xLjU5LTEuOTktMy4wOTctNS4wNDMtNC4wMzIuNzA0LTMuMTEuMzktNS41ODctLjk4OC02LjM4LS4zMTgtLjE4NC0uNjg4LS4yNzctMS4wOTItLjI3OHptLS4wMDUgMS4wOXYuMDA2Yy4yMjUgMCAuNDA2LjA0NC41NTguMTI3LjY2Ni4zODIuOTU1IDEuODM1LjczIDMuNzA0LS4wNTQuNDYtLjE0Mi45NDUtLjI1IDEuNDQtLjk2LS4yMzYtMi4wMDYtLjQxNy0zLjEwNy0uNTM0LS42Ni0uOTA1LTEuMzQ1LTEuNzI3LTIuMDM1LTIuNDQ3IDEuNTkyLTEuNDggMy4wODctMi4yOTIgNC4xMDUtMi4yOTV6bS05Ljc3LjAyYzEuMDEyIDAgMi41MTQuODA4IDQuMTEgMi4yOC0uNjg2LjcyLTEuMzcgMS41MzctMi4wMiAyLjQ0Mi0xLjEwNy4xMTctMi4xNTQuMjk4LTMuMTEzLjUzOC0uMTEyLS40OS0uMTk1LS45NjQtLjI1NC0xLjQyLS4yMy0xLjg2OC4wNTQtMy4zMi43MTQtMy43MDcuMTktLjA5LjQtLjEyNy41NjMtLjEzMnptNC44ODIgMy4wNWMuNDU1LjQ2OC45MS45OTIgMS4zNiAxLjU2NC0uNDQtLjAyLS44OS0uMDM0LTEuMzQ1LS4wMzQtLjQ2IDAtLjkxNS4wMS0xLjM2LjAzNC40NC0uNTcyLjg5NS0xLjA5NiAxLjM0NS0xLjU2NXpNMTIgOC4xYy43NCAwIDEuNDc3LjAzNCAyLjIwMi4wOTMuNDA2LjU4Mi44MDIgMS4yMDMgMS4xODMgMS44Ni4zNzIuNjQuNzEgMS4yOSAxLjAxOCAxLjk0Ni0uMzA4LjY1NS0uNjQ2IDEuMzEtMS4wMTMgMS45NS0uMzguNjYtLjc3MyAxLjI4OC0xLjE4IDEuODctLjcyOC4wNjMtMS40NjYuMDk4LTIuMjEuMDk4LS43NCAwLTEuNDc3LS4wMzUtMi4yMDItLjA5My0uNDA2LS41ODItLjgwMi0xLjIwNC0xLjE4My0xLjg2LS4zNzItLjY0LS43MS0xLjI5LTEuMDE4LTEuOTQ2LjMwMy0uNjU3LjY0Ni0xLjMxMyAxLjAxMy0xLjk1NC4zOC0uNjYuNzczLTEuMjg2IDEuMTgtMS44NjguNzI4LS4wNjQgMS40NjYtLjA5OCAyLjIxLS4wOTh6bS0zLjYzNS4yNTRjLS4yNC4zNzctLjQ4Ljc2My0uNzA0IDEuMTYtLjIyNS4zOS0uNDM1Ljc4Mi0uNjM1IDEuMTc0LS4yNjUtLjY1Ni0uNDktMS4zMS0uNjc2LTEuOTQ3LjY0LS4xNSAxLjMxNS0uMjgzIDIuMDE1LS4zODZ6bTcuMjYgMGMuNjk1LjEwMyAxLjM2NS4yMyAyLjAwNi4zODctLjE4LjYzMi0uNDA1IDEuMjgyLS42NiAxLjkzMy0uMi0uMzktLjQxLS43ODMtLjY0LTEuMTc0LS4yMjUtLjM5Mi0uNDY1LS43NzQtLjcwNS0xLjE0NnptMy4wNjMuNjc1Yy40ODQuMTUuOTQ0LjMxNyAxLjM3NS40OTggMS43MzIuNzQgMi44NTIgMS43MDggMi44NTIgMi40NzYtLjAwNS43NjgtMS4xMjUgMS43NC0yLjg1NyAyLjQ3NS0uNDIuMTgtLjg4LjM0Mi0xLjM1NS40OTMtLjI4LS45NTgtLjY0Ni0xLjk1Ni0xLjEtMi45OC40NS0xLjAxNy44MS0yLjAxIDEuMDg1LTIuOTY0em0tMTMuMzk1LjAwNGMuMjc4Ljk2LjY0NSAxLjk1NyAxLjEgMi45OC0uNDUgMS4wMTctLjgxMiAyLjAxLTEuMDg2IDIuOTY0LS40ODQtLjE1LS45NDQtLjMxOC0xLjM3LS41LTEuNzMyLS43MzctMi44NTItMS43MDYtMi44NTItMi40NzQgMC0uNzY4IDEuMTItMS43NDIgMi44NTItMi40NzYuNDItLjE4Ljg4LS4zNDIgMS4zNTYtLjQ5NHptMTEuNjc4IDQuMjhjLjI2NS42NTcuNDkgMS4zMTIuNjc2IDEuOTQ4LS42NC4xNTctMS4zMTYuMjktMi4wMTYuMzkuMjQtLjM3NS40OC0uNzYyLjcwNS0xLjE1OC4yMjUtLjM5LjQzNS0uNzg4LjYzNi0xLjE4em0tOS45NDUuMDJjLjIuMzkyLjQxLjc4My42NCAxLjE3NS4yMy4zOS40NjUuNzcyLjcwNSAxLjE0My0uNjk1LS4xMDItMS4zNjUtLjIzLTIuMDA2LS4zODYuMTgtLjYzLjQwNi0xLjI4Mi42Ni0xLjkzM3pNMTcuOTIgMTYuMzJjLjExMi40OTMuMi45NjguMjU0IDEuNDIzLjIzIDEuODY4LS4wNTQgMy4zMi0uNzE0IDMuNzA4LS4xNDcuMDktLjMzOC4xMjgtLjU2My4xMjgtMS4wMTIgMC0yLjUxNC0uODA3LTQuMTEtMi4yOC42ODYtLjcyIDEuMzctMS41MzYgMi4wMi0yLjQ0IDEuMTA3LS4xMTggMi4xNTQtLjMgMy4xMTMtLjU0em0tMTEuODMuMDFjLjk2LjIzNCAyLjAwNi40MTUgMy4xMDcuNTMyLjY2LjkwNSAxLjM0NSAxLjcyNyAyLjAzNSAyLjQ0Ni0xLjU5NSAxLjQ4My0zLjA5MiAyLjI5NS00LjExIDIuMjk1LS4yMi0uMDA1LS40MDYtLjA1LS41NTMtLjEzMi0uNjY2LS4zOC0uOTU1LTEuODM0LS43My0zLjcwMy4wNTQtLjQ2LjE0Mi0uOTQ0LjI1LTEuNDM4em00LjU2LjY0Yy40NC4wMi44OS4wMzQgMS4zNDUuMDM0LjQ2IDAgLjkxNS0uMDEgMS4zNi0uMDM0LS40NC41NzItLjg5NSAxLjA5NS0xLjM0NSAxLjU2NS0uNDU1LS40Ny0uOTEtLjk5My0xLjM2LTEuNTY1eiIvPjwvc3ZnPg==", "node": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNUZBMDRFIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+Tm9kZS5qczwvdGl0bGU+PHBhdGggZD0iTTExLjk5OCwyNGMtMC4zMjEsMC0wLjY0MS0wLjA4NC0wLjkyMi0wLjI0N2wtMi45MzYtMS43MzdjLTAuNDM4LTAuMjQ1LTAuMjI0LTAuMzMyLTAuMDgtMC4zODMgYzAuNTg1LTAuMjAzLDAuNzAzLTAuMjUsMS4zMjgtMC42MDRjMC4wNjUtMC4wMzcsMC4xNTEtMC4wMjMsMC4yMTgsMC4wMTdsMi4yNTYsMS4zMzljMC4wODIsMC4wNDUsMC4xOTcsMC4wNDUsMC4yNzIsMGw4Ljc5NS01LjA3NiBjMC4wODItMC4wNDcsMC4xMzQtMC4xNDEsMC4xMzQtMC4yMzhWNi45MjFjMC0wLjA5OS0wLjA1My0wLjE5Mi0wLjEzNy0wLjI0MmwtOC43OTEtNS4wNzJjLTAuMDgxLTAuMDQ3LTAuMTg5LTAuMDQ3LTAuMjcxLDAgTDMuMDc1LDYuNjhDMi45OSw2LjcyOSwyLjkzNiw2LjgyNSwyLjkzNiw2LjkyMXYxMC4xNWMwLDAuMDk3LDAuMDU0LDAuMTg5LDAuMTM5LDAuMjM1bDIuNDA5LDEuMzkyIGMxLjMwNywwLjY1NCwyLjEwOC0wLjExNiwyLjEwOC0wLjg5VjcuNzg3YzAtMC4xNDIsMC4xMTQtMC4yNTMsMC4yNTYtMC4yNTNoMS4xMTVjMC4xMzksMCwwLjI1NSwwLjExMiwwLjI1NSwwLjI1M3YxMC4wMjEgYzAsMS43NDUtMC45NSwyLjc0NS0yLjYwNCwyLjc0NWMtMC41MDgsMC0wLjkwOSwwLTIuMDI2LTAuNTUxTDIuMjgsMTguNjc1Yy0wLjU3LTAuMzI5LTAuOTIyLTAuOTQ1LTAuOTIyLTEuNjA0VjYuOTIxIGMwLTAuNjU5LDAuMzUzLTEuMjc1LDAuOTIyLTEuNjAzbDguNzk1LTUuMDgyYzAuNTU3LTAuMzE1LDEuMjk2LTAuMzE1LDEuODQ4LDBsOC43OTQsNS4wODJjMC41NywwLjMyOSwwLjkyNCwwLjk0NCwwLjkyNCwxLjYwMyB2MTAuMTVjMCwwLjY1OS0wLjM1NCwxLjI3My0wLjkyNCwxLjYwNGwtOC43OTQsNS4wNzhDMTIuNjQzLDIzLjkxNiwxMi4zMjQsMjQsMTEuOTk4LDI0eiBNMTkuMDk5LDEzLjk5MyBjMC0xLjktMS4yODQtMi40MDYtMy45ODctMi43NjNjLTIuNzMxLTAuMzYxLTMuMDA5LTAuNTQ4LTMuMDA5LTEuMTg3YzAtMC41MjgsMC4yMzUtMS4yMzMsMi4yNTgtMS4yMzMgYzEuODA3LDAsMi40NzMsMC4zODksMi43NDcsMS42MDdjMC4wMjQsMC4xMTUsMC4xMjksMC4xOTksMC4yNDcsMC4xOTloMS4xNDFjMC4wNzEsMCwwLjEzOC0wLjAzMSwwLjE4Ni0wLjA4MSBjMC4wNDgtMC4wNTQsMC4wNzQtMC4xMjMsMC4wNjctMC4xOTZjLTAuMTc3LTIuMDk4LTEuNTcxLTMuMDc2LTQuMzg4LTMuMDc2Yy0yLjUwOCwwLTQuMDA0LDEuMDU4LTQuMDA0LDIuODMzIGMwLDEuOTI1LDEuNDg4LDIuNDU3LDMuODk1LDIuNjk1YzIuODgsMC4yODIsMy4xMDMsMC43MDMsMy4xMDMsMS4yNjljMCwwLjk4My0wLjc4OSwxLjQwMi0yLjY0MiwxLjQwMiBjLTIuMzI3LDAtMi44MzktMC41ODQtMy4wMTEtMS43NDJjLTAuMDItMC4xMjQtMC4xMjYtMC4yMTUtMC4yNTMtMC4yMTVoLTEuMTM3Yy0wLjE0MSwwLTAuMjU0LDAuMTEyLTAuMjU0LDAuMjUzIGMwLDEuNDgyLDAuODA2LDMuMjQ4LDQuNjU1LDMuMjQ4QzE3LjUwMSwxNy4wMDcsMTkuMDk5LDE1LjkxLDE5LjA5OSwxMy45OTN6Ii8+PC9zdmc+", "express": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+RXhwcmVzczwvdGl0bGU+PHBhdGggZD0iTTI0IDE4LjU4OGExLjUyOSAxLjUyOSAwIDAxLTEuODk1LS43MmwtMy40NS00Ljc3MS0uNS0uNjY3LTQuMDAzIDUuNDQ0YTEuNDY2IDEuNDY2IDAgMDEtMS44MDIuNzA4bDUuMTU4LTYuOTItNC43OTgtNi4yNTFhMS41OTUgMS41OTUgMCAwMTEuOS42NjZsMy41NzYgNC44MyAzLjU5Ni00LjgxYTEuNDM1IDEuNDM1IDAgMDExLjc4OC0uNjY4TDIxLjcwOCA3LjlsLTIuNTIyIDMuMjgzYS42NjYuNjY2IDAgMDAwIC45OTRsNC44MDQgNi40MTJ6TS4wMDIgMTEuNTc2bC40Mi0yLjA3NWMxLjE1NC00LjEwMyA1Ljg1OC01LjgxIDkuMDk0LTMuMjcgMS44OTUgMS40ODkgMi4zNjggMy41OTcgMi4yNzUgNS45NzNIMS4xMTZDLjk0MyAxNi40NDcgNC4wMDUgMTkuMDA5IDcuOTIgMTcuN2E0LjA3OCA0LjA3OCAwIDAwMi41ODItMi44NzZjLjIwNy0uNjY2LjU0OC0uNzggMS4xNzQtLjU4OGE1LjQxNyA1LjQxNyAwIDAxLTIuNTg5IDMuOTU3IDYuMjcyIDYuMjcyIDAgMDEtNy4zMDYtLjkzMyA2LjU3NSA2LjU3NSAwIDAxLTEuNjQtMy44NThjMC0uMjM1LS4wOC0uNDU1LS4xMzQtLjY2NkE4OC4zMyA4OC4zMyAwIDAxMCAxMS41Nzd6bTEuMTI3LS4yODZoOS42NTRjLS4wNi0zLjA3Ni0yLjAwMS01LjI1OC00LjU5LTUuMjc4LTIuODgyLS4wNC00Ljk0NCAyLjA5NC01LjA3MSA1LjI2NHoiLz48L3N2Zz4=", "sqlite": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNjdCOERGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U1FMaXRlPC90aXRsZT48cGF0aCBkPSJNMjEuNjc4LjUyMWMtMS4wMzItLjkyLTIuMjgtLjU1LTMuNTEzLjU0NGE4LjcxIDguNzEgMCAwIDAtLjU0Ny41MzVjLTIuMTA5IDIuMjM3LTQuMDY2IDYuMzgtNC42NzQgOS41NDQuMjM3LjQ4LjQyMiAxLjA5My41NDQgMS41NjFhMTMuMDQ0IDEzLjA0NCAwIDAgMSAuMTY0LjcwM3MtLjAxOS0uMDcxLS4wOTYtLjI5NmwtLjA1LS4xNDZhMS42ODkgMS42ODkgMCAwIDAtLjAzMy0uMDhjLS4xMzgtLjMyLS41MTgtLjk5NS0uNjg2LTEuMjg5LS4xNDMuNDIzLS4yNy44MTgtLjM3NiAxLjE3Ni40ODQuODg0Ljc3OCAyLjQuNzc4IDIuNHMtLjAyNS0uMDk5LS4xNDctLjQ0MmMtLjEwNy0uMzAzLS42NDQtMS4yNDQtLjc3Mi0xLjQ2NC0uMjE3LjgwNC0uMzA0IDEuMzQ2LS4yMjYgMS40NzguMTUyLjI1Ni4yOTYuNjk4LjQyMiAxLjE4Ni4yODYgMS4xLjQ4NSAyLjQ0LjQ4NSAyLjQ0bC4wMTcuMjI0YTIyLjQxIDIyLjQxIDAgMCAwIC4wNTYgMi43NDhjLjA5NSAxLjE0Ni4yNzMgMi4xMy41IDIuNjU3bC4xNTUtLjA4NGMtLjMzNC0xLjAzOC0uNDctMi4zOTktLjQxLTMuOTY3LjA5LTIuMzk4LjY0Mi01LjI5IDEuNjYxLTguMzA0IDEuNzIzLTQuNTUgNC4xMTMtOC4yMDEgNi4zLTkuOTQ1LTEuOTkzIDEuOC00LjY5MiA3LjYzLTUuNSA5Ljc4OC0uOTA0IDIuNDE2LTEuNTQ1IDQuNjg0LTEuOTMxIDYuODU3LjY2Ni0yLjAzNyAyLjgyMS0yLjkxMiAyLjgyMS0yLjkxMnMxLjA1Ny0xLjMwNCAyLjI5Mi0zLjE2NmMtLjc0LjE2OS0xLjk1NS40NTgtMi4zNjIuNjI5LS42LjI1MS0uNzYyLjMzNy0uNzYyLjMzN3MxLjk0NS0xLjE4NCAzLjYxMy0xLjcyQzIxLjY5NSA3LjkgMjQuMTk1IDIuNzY3IDIxLjY3OC41MjFtLTE4LjU3My41NDNBMS44NDIgMS44NDIgMCAwIDAgMS4yNyAyLjl2MTYuNjA4YTEuODQgMS44NCAwIDAgMCAxLjgzNSAxLjgzNGg5LjQxOGEyMi45NTMgMjIuOTUzIDAgMCAxLS4wNTItMi43MDdjLS4wMDYtLjA2Mi0uMDExLS4xNDEtLjAxNi0uMmEyNy4wMSAyNy4wMSAwIDAgMC0uNDczLTIuMzc4Yy0uMTIxLS40Ny0uMjc1LS44OTgtLjM2OS0xLjA1Ny0uMTE2LS4xOTctLjA5OC0uMzEtLjA5Ny0uNDMyIDAtLjEyLjAxNS0uMjQ1LjAzNy0uMzg2YTkuOTggOS45OCAwIDAgMSAuMjM0LTEuMDQ1bC4yMTctLjAyOGMtLjAxNy0uMDM1LS4wMTQtLjA2NS0uMDMxLS4wOTdsLS4wNDEtLjM4MWEzMi44IDMyLjggMCAwIDEgLjM4Mi0xLjE5NGwuMi0uMDE5Yy0uMDA4LS4wMTYtLjAxLS4wMzgtLjAxOC0uMDUzbC0uMDQzLS4zMTZjLjYzLTMuMjggMi41ODctNy40NDMgNC44LTkuNzkxLjA2Ni0uMDY5LjEzMy0uMTI4LjE5OC0uMTk0WiIvPjwvc3ZnPg==", "postgres": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNjk5RUNBIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UG9zdGdyZVNRTDwvdGl0bGU+PHBhdGggZD0iTTIzLjU1OTQgMTQuNzIyOGEuNTI2OS41MjY5IDAgMCAwLS4wNTYzLS4xMTkxYy0uMTM5LS4yNjMyLS40NzY4LS4zNDE4LTEuMDA3NC0uMjMyMS0xLjY1MzMuMzQxMS0yLjI5MzUuMTMxMi0yLjUyNTYtLjAxOTEgMS4zNDItMi4wNDgyIDIuNDQ1LTQuNTIyIDMuMDQxMS02LjgyOTcuMjcxNC0xLjA1MDcuNzk4Mi0zLjUyMzcuMTIyMi00LjczMTZhMS41NjQxIDEuNTY0MSAwIDAgMC0uMTUwOS0uMjM1QzIxLjY5MzEuOTA4NiAxOS44MDA3LjAyNDggMTcuNTA5OS4wMDA1Yy0xLjQ5NDctLjAxNTgtMi43NzA1LjM0NjEtMy4xMTYxLjQ3OTRhOS40NDkgOS40NDkgMCAwIDAtLjUxNTktLjA4MTYgOC4wNDQgOC4wNDQgMCAwIDAtMS4zMTE0LS4xMjc4Yy0xLjE4MjItLjAxODQtMi4yMDM4LjI2NDItMy4wNDk4Ljg0MDYtLjg1NzMtLjMyMTEtNC43ODg4LTEuNjQ1LTcuMjIxOS4wNzg4Qy45MzU5IDIuMTUyNi4zMDg2IDMuODczMy40MzAyIDYuMzA0M2MuMDQwOS44MTguNTA2OSAzLjMzNCAxLjI0MjMgNS43NDM2LjQ1OTggMS41MDY1LjkzODcgMi43MDE5IDEuNDMzNCAzLjU4Mi41NTMuOTk0MiAxLjEyNTkgMS41OTMzIDEuNzE0MyAxLjc4OTUuNDQ3NC4xNDkxIDEuMTMyNy4xNDQxIDEuODU4MS0uNzI3OS44MDEyLS45NjM1IDEuNTkwMy0xLjgyNTggMS45NDQ2LTIuMjA2OS40MzUxLjIzNTUuOTA2NC4zNjI1IDEuMzkuMzc3MmEuMDU2OS4wNTY5IDAgMCAwIC4wMDA0LjAwNDEgMTEuMDMxMiAxMS4wMzEyIDAgMCAwLS4yNDcyLjMwNTRjLS4zMzg5LjQzMDItLjQwOTQuNTE5Ny0xLjUwMDIuNzQ0My0uMzEwMi4wNjQtMS4xMzQ0LjIzMzktMS4xNDY0LjgxMTUtLjAwMjUuMTIyNC4wMzI5LjIzMDkuMDkxOS4zMjY4LjIyNjkuNDIzMS45MjE2LjYwOTcgMS4wMTUuNjMzMSAxLjMzNDUuMzMzNSAyLjUwNDQuMDkyIDMuMzcxNC0uNjc4Ny0uMDE3IDIuMjMxLjA3NzUgNC40MTc0LjM0NTQgNS4wODc0LjIyMTIuNTUyOS43NjE4IDEuOTA0NSAyLjQ2OTIgMS45MDQzLjI1MDUgMCAuNTI2My0uMDI5MS44Mjk2LS4wOTQxIDEuNzgxOS0uMzgyMSAyLjU1NTctMS4xNjk2IDIuODU1LTIuOTA1OS4xNTAzLS44NzA3LjQwMTYtMi44NzUzLjUzODgtNC4xMDEyLjAxNjktLjA3MDMuMDM1Ny0uMTIwNy4wNTctLjEzNjIuMDAwNy0uMDAwNS4wNjk3LS4wNDcxLjQyNzIuMDMwN2EuMzY3My4zNjczIDAgMCAwIC4wNDQzLjAwNjhsLjI1MzkuMDIyMy4wMTQ5LjAwMWMuODQ2OC4wMzg0IDEuOTExNC0uMTQyNiAyLjUzMTItLjQzMDguNjQzOC0uMjk4OCAxLjgwNTctMS4wMzIzIDEuNTk1MS0xLjY2OTh6TTIuMzcxIDExLjg3NjVjLS43NDM1LTIuNDM1OC0xLjE3NzktNC44ODUxLTEuMjEyMy01LjU3MTktLjEwODYtMi4xNzE0LjQxNzEtMy42ODI5IDEuNTYyMy00LjQ5MjcgMS44MzY3LTEuMjk4NiA0LjgzOTgtLjU0MDggNi4xMDgtLjEzLS4wMDMyLjAwMzItLjAwNjYuMDA2MS0uMDA5OC4wMDk0LTIuMDIzOCAyLjA0NC0xLjk3NTggNS41MzYtMS45NzA4IDUuNzQ5NS0uMDAwMi4wODIzLjAwNjYuMTk4OS4wMTYyLjM1OTMuMDM0OC41ODczLjA5OTYgMS42ODA0LS4wNzM1IDIuOTE4NC0uMTYwOSAxLjE1MDQuMTkzNyAyLjI3NjQuOTcyOCAzLjA4OTIuMDgwNi4wODQxLjE2NDguMTYzMS4yNTE4LjIzNzQtLjM0NjguMzcxNC0xLjEwMDQgMS4xOTI2LTEuOTAyNSAyLjE1NzYtLjU2NzcuNjgyNS0uOTU5Ny41NTE3LTEuMDg4Ni41MDg3LS4zOTE5LS4xMzA3LS44MTMtLjU4NzEtMS4yMzgxLTEuMzIyMy0uNDc5Ni0uODM5LS45NjM1LTIuMDMxNy0xLjQxNTUtMy41MTI2em02LjAwNzIgNS4wODcxYy0uMTcxMS0uMDQyOC0uMzI3MS0uMTEzMi0uNDMyMi0uMTc3Mi4wODg5LS4wMzk0LjIzNzQtLjA5MDIuNDgzMy0uMTQwOSAxLjI4MzMtLjI2NDEgMS40ODE1LS40NTA2IDEuOTE0My0xLjAwMDIuMDk5Mi0uMTI2LjIxMTYtLjI2ODcuMzY3My0uNDQyNmEuMzU0OS4zNTQ5IDAgMCAwIC4wNzM3LS4xMjk4Yy4xNzA4LS4xNTEzLjI3MjQtLjEwOTkuNDM2OS0uMDQxNy4xNTYuMDY0Ni4zMDc4LjI2LjM2OTUuNDc1Mi4wMjkxLjEwMTYuMDYxOS4yOTQ1LS4wNDUyLjQ0NDQtLjkwNDMgMS4yNjU4LTIuMjIxNiAxLjI0OTQtMy4xNjc2IDEuMDEyOHptMi4wOTQtMy45ODgtLjA1MjUuMTQxYy0uMTMzLjM1NjYtLjI1NjcuNjg4MS0uMzMzNCAxLjAwMy0uNjY3NC0uMDAyMS0xLjMxNjgtLjI4NzItMS44MTA1LS44MDI0LS42Mjc5LS42NTUxLS45MTMxLTEuNTY2NC0uNzgyNS0yLjUwMDQuMTgyOC0xLjMwNzkuMTE1My0yLjQ0NjguMDc5LTMuMDU4Ni0uMDA1LS4wODU3LS4wMDk1LS4xNjA3LS4wMTIyLS4yMTk5LjI5NTctLjI2MjEgMS42NjU5LS45OTYyIDIuNjQyOS0uNzcyNC40NDU5LjEwMjIuNzE3Ni40MDU3LjgzMDUuOTI4LjU4NDYgMi43MDM4LjA3NzQgMy44MzA3LS4zMzAyIDQuNzM2My0uMDg0LjE4NjYtLjE2MzMuMzYyOS0uMjMxMS41NDU0em03LjM2MzcgNC41NzI1Yy0uMDE2OS4xNzY4LS4wMzU4LjM3Ni0uMDYxOC41OTU5bC0uMTQ2LjQzODNhLjM1NDcuMzU0NyAwIDAgMC0uMDE4Mi4xMDc3Yy0uMDA1OS40NzQ3LS4wNTQuNjQ4OS0uMTE1Ljg2OTMtLjA2MzQuMjI5Mi0uMTM1My40ODkxLS4xNzk0IDEuMDU3NS0uMTEgMS40MTQzLS44NzgyIDIuMjI2Ny0yLjQxNzIgMi41NTY1LTEuNTE1NS4zMjUxLTEuNzg0My0uNDk2OC0yLjAyMTItMS4yMjE3YTYuNTgyNCA2LjU4MjQgMCAwIDAtLjA3NjktLjIyNjZjLS4yMTU0LS41ODU4LS4xOTExLTEuNDExOS0uMTU3NC0yLjU1NTEuMDE2NS0uNTYxMi0uMDI0OS0xLjkwMTMtLjMzMDItMi42NDYyLjAwNDQtLjI5MzIuMDEwNi0uNTkwOS4wMTktLjg5MThhLjM1MjkuMzUyOSAwIDAgMC0uMDE1My0uMTEyNiAxLjQ5MjcgMS40OTI3IDAgMCAwLS4wNDM5LS4yMDhjLS4xMjI2LS40MjgzLS40MjEzLS43ODY2LS43Nzk3LS45MzUxLS4xNDI0LS4wNTktLjQwMzgtLjE2NzItLjcxNzgtLjA4NjkuMDY3LS4yNzYuMTgzMS0uNTg3NS4zMDktLjkyNDlsLjA1MjktLjE0MmMuMDU5NS0uMTYuMTM0LS4zMjU3LjIxMy0uNTAxMi40MjY1LS45NDc2IDEuMDEwNi0yLjI0NTMuMzc2Ni01LjE3NzItLjIzNzQtMS4wOTgxLTEuMDMwNC0xLjYzNDMtMi4yMzI0LTEuNTA5OC0uNzIwNy4wNzQ2LTEuMzc5OS4zNjU0LTEuNzA4OC41MzIxYTUuNjcxNiA1LjY3MTYgMCAwIDAtLjE5NTguMTA0MWMuMDkxOC0xLjEwNjQuNDM4Ni0zLjE3NDEgMS43MzU3LTQuNDgyM2E0LjAzMDYgNC4wMzA2IDAgMCAxIC4zMDMzLS4yNzYuMzUzMi4zNTMyIDAgMCAwIC4xNDQ3LS4wNjQ0Yy43NTI0LS41NzA2IDEuNjk0NS0uODUwNiAyLjgwMi0uODMyNS40MDkxLjAwNjcuODAxNy4wMzM5IDEuMTc0Mi4wODEgMS45MzkuMzU0NCAzLjI0MzkgMS40NDY4IDQuMDM1OSAyLjM4MjcuODE0My45NjIzIDEuMjU1MiAxLjkzMTUgMS40MzEyIDIuNDU0My0xLjMyMzItLjEzNDYtMi4yMjM0LjEyNjgtMi42Nzk3Ljc3OS0uOTkyNiAxLjQxODkuNTQzIDQuMTcyOSAxLjI4MTEgNS40OTY0LjEzNTMuMjQyNi4yNTIyLjQ1MjIuMjg4OS41NDEzLjI0MDMuNTgyNS41NTE1Ljk3MTMuNzc4NyAxLjI1NTIuMDY5Ni4wODcuMTM3Mi4xNzE0LjE4ODUuMjQ1LS40MDA4LjExNTUtMS4xMjA4LjM4MjUtMS4wNTUyIDEuNzE3LS4wMTIzLjE1NjMtLjA0MjMuNDQ2OS0uMDgzNC44MTQ4LS4wNDYxLjIwNzctLjA3MDIuNDYwMy0uMDk5NC43NjYyem0uODkwNS0xLjYyMTFjLS4wNDA1LS44MzE2LjI2OTEtLjkxODUuNTk2Ny0xLjAxMDVhMi44NTY2IDIuODU2NiAwIDAgMCAuMTM1LS4wNDA2IDEuMjAyIDEuMjAyIDAgMCAwIC4xMzQyLjEwM2MuNTcwMy4zNzY1IDEuNTgyMy40MjEzIDMuMDA2OC4xMzQ0LS4yMDE2LjE3NjktLjUxODkuMzk5NC0uOTUzMy42MDExLS40MDk4LjE5MDMtMS4wOTU3LjMzMy0xLjc0NzMuMzYzNi0uNzE5Ny4wMzM2LTEuMDg1OS0uMDgwNy0xLjE3MjEtLjE1MXptLjU2OTUtOS4yNzEyYy0uMDA1OS4zNTA4LS4wNTQyLjY2OTItLjEwNTQgMS4wMDE3LS4wNTUuMzU3Ni0uMTEyLjcyNzQtLjEyNjQgMS4xNzYyLS4wMTQyLjQzNjguMDQwNC44OTA5LjA5MzIgMS4zMzAxLjEwNjYuODg3LjIxNiAxLjgwMDMtLjIwNzUgMi43MDE0YTMuNTI3MiAzLjUyNzIgMCAwIDEtLjE4NzYtLjM4NTZjLS4wNTI3LS4xMjc2LS4xNjY5LS4zMzI2LS4zMjUxLS42MTYyLS42MTU2LTEuMTA0MS0yLjA1NzQtMy42ODk2LTEuMzE5My00Ljc0NDYuMzc5NS0uNTQyNyAxLjM0MDgtLjU2NjEgMi4xNzgxLS40NjN6bS4yMjg0IDcuMDEzN2ExMi4zNzYyIDEyLjM3NjIgMCAwIDAtLjA4NTMtLjEwNzRsLS4wMzU1LS4wNDQ0Yy43MjYyLTEuMTk5NS41ODQyLTIuMzg2Mi40NTc4LTMuNDM4NS0uMDUxOS0uNDMxOC0uMTAwOS0uODM5Ni0uMDg4NS0xLjIyMjYuMDEyOS0uNDA2MS4wNjY2LS43NTQzLjExODUtMS4wOTExLjA2MzktLjQxNS4xMjg4LS44NDQzLjExMDktMS4zNTA1LjAxMzQtLjA1MzEuMDE4OC0uMTE1OC4wMTE4LS4xOTAyLS4wNDU3LS40ODU1LS41OTk5LTEuOTM4LTEuNzI5NC0zLjI1My0uNjA3Ni0uNzA3My0xLjQ4OTYtMS40OTcyLTIuNjg4OS0yLjAzOTUuNTI1MS0uMTA2NiAxLjIzMjgtLjIwMzUgMi4wMjQ0LS4xODU5IDIuMDUxNS4wNDU2IDMuNjc0Ni44MTM1IDQuODI0MiAyLjI4MjRhLjkwOC45MDggMCAwIDEgLjA2NjcuMTAwMmMuNzIzMSAxLjM1NTYtLjI3NjIgNi4yNzUxLTIuOTg2NyAxMC41NDA1em0tOC44MTY2LTYuMTE2MmMtLjAyNS4xNzk0LS4zMDg5LjQyMjUtLjYyMTEuNDIyNWEuNTgyMS41ODIxIDAgMCAxLS4wODA5LS4wMDU2Yy0uMTg3My0uMDI2LS4zNzY1LS4xNDQtLjUwNTktLjMxNTYtLjA0NTgtLjA2MDUtLjEyMDMtLjE3OC0uMTA1NS0uMjg0NC4wMDU1LS4wNDAxLjAyNjEtLjA5ODUuMDkyNS0uMTQ4OC4xMTgyLS4wODk0LjM1MTgtLjEyMjYuNjA5Ni0uMDg2Ny4zMTYzLjA0NDEuNjQyNi4xOTM4LjYxMTMuNDE4NnptNy45MzA1LS40MTE0Yy4wMTExLjA3OTItLjA0OS4yMDEtLjE1MzEuMzEwMi0uMDY4My4wNzE3LS4yMTIuMTk2MS0uNDA3OS4yMjMyYS41NDU2LjU0NTYgMCAwIDEtLjA3NS4wMDUyYy0uMjkzNSAwLS41NDE0LS4yMzQ0LS41NjA3LS4zNzE3LS4wMjQtLjE3NjUuMjY0MS0uMzEwNi41NjExLS4zNTIuMjk3LS4wNDE0LjYxMTEuMDA4OC42MzU2LjE4NTF6Ii8+PC9zdmc+", "solana": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjQUQ5MUZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U29sYW5hPC90aXRsZT48cGF0aCBkPSJtMjMuODc2NCAxOC4wMzEzLTMuOTYyIDQuMTM5M2EuOTIwMS45MjAxIDAgMCAxLS4zMDYuMjEwNi45NDA3Ljk0MDcgMCAwIDEtLjM2Ny4wNzQySC40NTk5YS40Njg5LjQ2ODkgMCAwIDEtLjI1MjItLjA3MzMuNDUxMy40NTEzIDAgMCAxLS4xNjk2LS4xOTYyLjQzNzUuNDM3NSAwIDAgMS0uMDMxNC0uMjU0NS40NDM4LjQ0MzggMCAwIDEgLjExNy0uMjI5OGwzLjk2NDktNC4xMzkzYS45Mi45MiAwIDAgMSAuMzA1Mi0uMjEwMi45NDA3Ljk0MDcgMCAwIDEgLjM2NTgtLjA3NDZIMjMuNTRhLjQ2OTIuNDY5MiAwIDAgMSAuMjUyMy4wNzM0LjQ1MzEuNDUzMSAwIDAgMSAuMTY5Ny4xOTYuNDM4LjQzOCAwIDAgMSAuMDMxMy4yNTQ3LjQ0NDIuNDQ0MiAwIDAgMS0uMTE2OS4yMjk3em0tMy45NjItOC4zMzU1YS45MjAyLjkyMDIgMCAwIDAtLjMwNi0uMjEwNi45NDEuOTQxIDAgMCAwLS4zNjctLjA3NDJILjQ1OTlhLjQ2ODcuNDY4NyAwIDAgMC0uMjUyMi4wNzM0LjQ1MTMuNDUxMyAwIDAgMC0uMTY5Ni4xOTYxLjQzNzYuNDM3NiAwIDAgMC0uMDMxNC4yNTQ2LjQ0NC40NDQgMCAwIDAgLjExNy4yMjk3bDMuOTY0OSA0LjEzOTRhLjkyMDQuOTIwNCAwIDAgMCAuMzA1Mi4yMTAyYy4xMTU0LjA0OS4yNC4wNzQ0LjM2NTguMDc0NkgyMy41NGEuNDY5LjQ2OSAwIDAgMCAuMjUyMy0uMDczNC40NTMuNDUzIDAgMCAwIC4xNjk3LS4xOTYxLjQzODIuNDM4MiAwIDAgMCAuMDMxMy0uMjU0Ni40NDQ0LjQ0NDQgMCAwIDAtLjExNjktLjIyOTd6TS40NiA2LjcyMjVoMTguNzgxNWEuOTQxMS45NDExIDAgMCAwIC4zNjctLjA3NDIuOTIwMi45MjAyIDAgMCAwIC4zMDYtLjIxMDZsMy45NjItNC4xMzk0YS40NDQyLjQ0NDIgMCAwIDAgLjExNy0uMjI5Ny40Mzc4LjQzNzggMCAwIDAtLjAzMTQtLjI1NDYuNDUzLjQ1MyAwIDAgMC0uMTY5Ny0uMTk2LjQ2OS40NjkgMCAwIDAtLjI1MjMtLjA3MzRINC43NTk2YS45NDEuOTQxIDAgMCAwLS4zNjU4LjA3NDUuOTIwMy45MjAzIDAgMCAwLS4zMDUyLjIxMDJMLjEyNDYgNS45Njg3YS40NDM4LjQ0MzggMCAwIDAtLjExNjkuMjI5NS40Mzc1LjQzNzUgMCAwIDAgLjAzMTIuMjU0NC40NTEyLjQ1MTIgMCAwIDAgLjE2OTIuMTk2LjQ2ODkuNDY4OSAwIDAgMCAuMjUxOC4wNzM5eiIvPjwvc3ZnPg==", "documenso": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAJFBMVEVMaXH///////////////////////////////////////////9tKdXLAAAAC3RSTlMAJN/vQBCghMhwWigcc4wAAAAJcEhZcwAACxMAAAsTAQCanBgAAAD8SURBVHjavVPbssMgCBRQLvr//3vYxjSaNnPe6kwSFVgW2JTy49VMRNuznVhMhel7MNXOsBFzrfUOQz5yHbHE2OuOoxxEuKoVLkDzDX/046sZeqDHWLPUkYEU5tJD2AxUBm0OVEiEHRZnwRExm0PIdZZIh77Wz6UYXxds+Vz9aNg3X2izN0SdNFXSV1dSJIqXnRkVLGKtu4OinazguXFCFyqQ58k+UwydeVaSSxXOG8l/ywQnNOod0JLVZyfXVsu91a/J5LB4RBe3oDm/ZdyzC/Yed9/GnbR7PQRDL8FQsO6S07vk/C7dlko9RZto7Un2ak+yn5oUsfbr3/UP5UUGP289TskAAAAASUVORK5CYII=", "asaas": "data:image/png;base64,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"};
+
 </script>
-</body></html>
+<script>
+const ARCH = {
+  layers: [
+    { id: 'access', name: 'Interface e acessos', color: '#8ce9c2', y: -225 },
+    { id: 'application', name: 'Aplicação · um processo Node.js', color: '#51d6ae', y: -75 },
+    { id: 'providers', name: 'Integrações de teste', color: '#79baff', y: 75 },
+    { id: 'storage', name: 'Dados e documentos', color: '#c1b0ff', y: 225 }
+  ],
+  nodes: [
+    {
+      id: 'frontend', name: 'React', subtitle: 'Interface · Vite + TypeScript',
+      layer: 'access', x: -240, z: -65, logo: 'react', status: 'Implementado',
+      description: 'Interface da equipe da imobiliária: operações, documentos, conciliação e posição econômica.',
+      owner: 'Equipe interna da imobiliária, com permissões definidas no servidor.',
+      limit: 'O login interno não é um portal para proprietário, comprador ou locatário.'
+    },
+    {
+      id: 'intellisys', name: 'Intellisys', subtitle: 'Integração futura · desconectada',
+      layer: 'access', x: 0, z: 65, logo: null, status: 'Futuro',
+      description: 'Possível origem de cadastros. Hoje, os dados são registrados localmente; a demo usa participantes fictícios.',
+      owner: 'União e fornecedor, mediante autorização de integração e acesso documentado à API.',
+      limit: 'Não há conexão, sincronização nem consulta ao Intellisys. A integração permanece adiada.'
+    },
+    {
+      id: 'participants', name: 'Acesso externo', subtitle: 'Participantes · ainda não existe',
+      layer: 'access', x: 240, z: -65, logo: null, status: 'Futuro',
+      description: 'Portais de proprietário, comprador e locatário exigem identidade e autorização próprias por operação.',
+      owner: 'Produto e segurança: definir o modelo de acesso dos participantes.',
+      limit: 'Cadastrar alguém como integrante da equipe não cria esse acesso. Convites de assinatura não são portais.'
+    },
+    {
+      id: 'api', name: 'Express API', subtitle: 'Sessões · regras · integrações',
+      layer: 'application', x: -240, z: -65, logo: 'express', status: 'Implementado',
+      description: 'Centraliza autenticação, isolamento por imobiliária, versões das operações, documentos e adaptadores dos provedores.',
+      owner: 'Backend da aplicação, executado em Node.js.',
+      limit: 'API, worker e cálculo são módulos do mesmo processo, não microserviços. Implementação não comprova disponibilidade atual.'
+    },
+    {
+      id: 'worker', name: 'Node worker', subtitle: 'Conciliação · mesmo processo',
+      layer: 'application', x: 0, z: 65, logo: 'node', status: 'Implementado',
+      description: 'Processa eventos persistidos, consulta cobrança e extrato no Asaas e grava a prova conciliada no SQLite.',
+      owner: 'Rotina de conciliação do backend Node.js, com tentativas e concorrência limitadas.',
+      limit: 'Não é um serviço independente. Webhook recebido não prova pagamento; divergências exigem revisão.'
+    },
+    {
+      id: 'economics', name: 'Posição econômica', subtitle: 'Cálculo · instruções de teste',
+      layer: 'application', x: 240, z: -65, logo: null, status: 'Implementado',
+      description: 'Calcula direitos do comprador e remuneração da imobiliária sobre o líquido conciliado. Prepara instruções cumulativas e auditadas.',
+      owner: 'Calculador canônico da aplicação; administrador controla suspensões e preparação.',
+      limit: 'Nova instrução exige verificar rede, mint não transferível e titularidade/saldo. Não executa Pix, saque ou repasse; não é smart contract financeiro.'
+    },
+    {
+      id: 'signature', name: 'Documenso', subtitle: 'Assinaturas verificáveis',
+      layer: 'providers', x: -240, z: -65, logo: 'documenso', status: 'Homologação',
+      description: 'Serviço separado para autorização, aceite e cessão. A API consulta o envelope e arquiva PDF assinado, auditoria e certificado.',
+      owner: 'Documenso mantém os envelopes e seu próprio PostgreSQL; operador confirma os vínculos e o avanço.',
+      limit: 'Certificado e participantes de teste não comprovam identidade qualificada nem validade jurídica. Não usa o SQLite da aplicação.'
+    },
+    {
+      id: 'banking', name: 'Asaas Sandbox', subtitle: 'Cobranças · extrato · webhooks',
+      layer: 'providers', x: 0, z: 65, logo: 'asaas', status: 'Sandbox',
+      description: 'Fornece cobranças e movimentos de teste. A conciliação verifica parcela, pagador, crédito, tarifas e líquido.',
+      owner: 'Asaas fornece os registros; a aplicação verifica e aplica as provas ao ledger local.',
+      limit: 'Sem dinheiro real. Caixa recebido não significa transferência aos participantes. Evento ou status isolado não quita a parcela.'
+    },
+    {
+      id: 'token', name: 'Solana Token-2022', subtitle: 'Recibo não transferível · teste',
+      layer: 'providers', x: 240, z: -65, logo: 'solana', status: 'Localnet',
+      description: 'Representa a operação por uma unidade não transferível na rede privada de desenvolvimento, com identidade de rede verificada.',
+      owner: 'Adaptador Solana da aplicação e programa padrão Token-2022.',
+      limit: 'Não é devnet pública nem mainnet. Não há programa Rust próprio. Recebimentos e estornos não queimam o token nem alteram seu saldo; documentos ficam off-chain.'
+    },
+    {
+      id: 'postgres', name: 'PostgreSQL', subtitle: 'Persistência do Documenso',
+      layer: 'storage', x: -240, z: -65, logo: 'postgres', status: 'Homologação',
+      description: 'Banco próprio do serviço de assinatura. Integra a recuperação dos envelopes junto do armazenamento e dos segredos do Documenso.',
+      owner: 'Serviço Documenso, separado da base operacional da aplicação.',
+      limit: 'Restaurar somente o SQLite não restaura envelopes remotos. A recuperação conjunta exige snapshots coordenados.'
+    },
+    {
+      id: 'sqlite', name: 'SQLite', subtitle: 'Ledger operacional e econômico',
+      layer: 'storage', x: 0, z: 65, logo: 'sqlite', status: 'Implementado',
+      description: 'Mantém contas, operações, eventos, provas conciliadas, direitos econômicos e histórico de instruções, com auditoria transacional.',
+      owner: 'Aplicação Node.js, com isolamento por imobiliária e validação de versões.',
+      limit: 'Não é banco financeiro nem registro público de direitos. A posição econômica fica aqui, não em um smart contract; auditoria não é imutável ao administrador do computador.'
+    },
+    {
+      id: 'documents', name: 'Documentos privados', subtitle: 'Originais e provas · off-chain',
+      layer: 'storage', x: 240, z: -65, logo: null, status: 'Implementado',
+      description: 'Arquiva documentos da operação e provas de assinatura, com hash e download autenticado, fora da blockchain.',
+      owner: 'Armazenamento privado da aplicação; acesso autorizado pela API da própria imobiliária.',
+      limit: 'Validar formato ou hash não comprova autenticidade jurídica nem substitui antivírus. On-chain segue apenas o vínculo técnico, nunca o documento.'
+    }
+  ],
+  links: [
+    { from: 'frontend', to: 'api', label: 'Ações autenticadas' },
+    { from: 'api', to: 'sqlite', label: 'Persiste operações e eventos' },
+    { from: 'api', to: 'documents', label: 'Arquiva e autoriza acesso' },
+    { from: 'api', to: 'signature', label: 'Envia PDF e consulta envelope' },
+    { from: 'signature', to: 'api', label: 'Estado e provas sob consulta' },
+    { from: 'signature', to: 'postgres', label: 'Persiste dados de assinatura' },
+    { from: 'api', to: 'banking', label: 'Cria cobranças de teste' },
+    { from: 'banking', to: 'api', label: 'Webhook autenticado' },
+    { from: 'sqlite', to: 'worker', label: 'Eventos e reservas persistidos' },
+    { from: 'worker', to: 'banking', label: 'Consulta cobrança e extrato' },
+    { from: 'worker', to: 'sqlite', label: 'Grava prova conciliada' },
+    { from: 'api', to: 'economics', label: 'Calcula e prepara instrução' },
+    { from: 'sqlite', to: 'economics', label: 'Termos e líquido conciliado' },
+    { from: 'economics', to: 'sqlite', label: 'Registra instrução auditada' },
+    { from: 'api', to: 'token', label: 'Emite e verifica recibo' },
+    { from: 'economics', to: 'token', label: 'Verifica titularidade e saldo' }
+  ],
+  flows: [
+    {
+      id: 'all', name: 'Arquitetura completa',
+      ids: ['frontend', 'intellisys', 'participants', 'api', 'worker', 'economics', 'signature', 'banking', 'token', 'postgres', 'sqlite', 'documents'],
+      description: 'Quatro camadas, doze componentes. Os estados indicam implementação e ambiente, não saúde em tempo real. Os dois itens futuros seguem sem conexão.'
+    },
+    {
+      id: 'signatures', name: 'Documentos e assinatura',
+      ids: ['frontend', 'api', 'signature', 'postgres', 'documents', 'sqlite'],
+      description: 'PDF privado → envelope Documenso → consulta e verificação → provas arquivadas. PostgreSQL pertence ao Documenso; SQLite pertence à aplicação.'
+    },
+    {
+      id: 'economy', name: 'Caixa e direitos',
+      ids: ['frontend', 'api', 'worker', 'banking', 'sqlite', 'economics', 'token'],
+      description: 'Webhook inicia a verificação; cobrança e extrato sustentam a conciliação. O ledger calcula direitos e guarda instruções de teste, sem executar repasses.'
+    },
+    {
+      id: 'tokenization', name: 'Token e titularidade',
+      ids: ['frontend', 'api', 'economics', 'token', 'sqlite', 'documents'],
+      description: 'Token-2022 não transferível em localnet. Nova instrução depende de titularidade verificada. Direitos ficam no SQLite; documentos, off-chain. Receber não queima o token.'
+    },
+    {
+      id: 'future', name: 'Fora do escopo atual',
+      ids: ['frontend', 'intellisys', 'participants'],
+      description: 'Intellisys está desconectado. Portais de participantes não existem; a autenticação disponível atende à equipe interna da imobiliária.'
+    }
+  ]
+};
+
+</script>
+<script>
+/* Canvas-only architecture explorer. Data stays in ARCH; no service calls are made. */
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const canvas = $('map');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) { $('scene-caption').textContent = 'Canvas indisponível. Explore os componentes pela lista.'; return; }
+  const layers = new Map(ARCH.layers.map(layer => [layer.id, layer]));
+  const nodes = new Map(ARCH.nodes.map(node => [node.id, node]));
+  const enabled = new Set(layers.keys());
+  const images = new Map();
+  const failures = new Set();
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let width = 0, height = 0, projected = [], selected = ARCH.nodes[0]?.id;
+  let yaw = -.26, pitch = .36, zoom = 1, flat = innerWidth < 640;
+  let flow = null, playing = false, frame = 0, drag = null, query = '';
+  let projectionScale = 1, projectionOffset = { x: 0, y: 0 };
+  const visible = node => enabled.has(node.layer);
+  const activeIds = () => flow ? new Set(ARCH.flows.find(item => item.id === flow)?.ids || []) : null;
+  const text = (id, value) => { const el = $(id); if (el) el.textContent = value || '—'; };
+  const button = (label, action) => { const el = document.createElement('button'); el.type = 'button'; el.textContent = label; el.addEventListener('click', action); return el; };
+  const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  function raw(point) {
+    const x = point.x * Math.cos(yaw) - point.z * Math.sin(yaw);
+    const z = point.x * Math.sin(yaw) + point.z * Math.cos(yaw);
+    const y = point.y * Math.cos(pitch) - z * Math.sin(pitch);
+    const depth = point.y * Math.sin(pitch) + z * Math.cos(pitch);
+    const perspective = 1100 / (1100 + depth);
+    return { x: x * perspective, y: y * perspective, depth };
+  }
+  function project(point) {
+    const p = raw(point);
+    return { x: width / 2 + (p.x - projectionOffset.x) * projectionScale, y: height / 2 + (p.y - projectionOffset.y) * projectionScale, depth: p.depth };
+  }
+  function fit() {
+    const points = ARCH.layers.flatMap(layer => [[-330,-130],[330,-130],[330,130],[-330,130]].map(([x,z]) => raw({ x, z, y: layer.y })));
+    const minX = Math.min(...points.map(p => p.x)), maxX = Math.max(...points.map(p => p.x));
+    const minY = Math.min(...points.map(p => p.y)), maxY = Math.max(...points.map(p => p.y));
+    projectionOffset = { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+    projectionScale = Math.min((width - 100) / (maxX - minX), (height - 112) / (maxY - minY)) * zoom;
+  }
+  function rounded(x, y, w, h, radius = 10) { ctx.beginPath(); ctx.roundRect(x, y, w, h, radius); }
+  function path(points) { ctx.beginPath(); points.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y)); ctx.closePath(); }
+  function lines(value, maxWidth) {
+    const words = String(value || '').split(/\s+/), result = [];
+    let line = '';
+    for (const word of words) {
+      if (ctx.measureText(line ? line + ' ' + word : word).width <= maxWidth) { line += (line ? ' ' : '') + word; continue; }
+      if (line) result.push(line);
+      line = '';
+      for (const char of word) {
+        if (ctx.measureText(line + char).width > maxWidth && line) { result.push(line); line = ''; }
+        line += char;
+      }
+    }
+    if (line) result.push(line);
+    return result;
+  }
+  function buildProjection() {
+    fit();
+    const cardWidth = flat ? Math.min(154, (width - 40) / 3 - 8) : Math.max(86, Math.min(144, width * .178));
+    ctx.font = '600 11px system-ui, sans-serif';
+    projected = ARCH.nodes.filter(visible).map(node => {
+      const layer = layers.get(node.layer);
+      const row = ARCH.layers.findIndex(item => item.id === node.layer);
+      const siblings = ARCH.nodes.filter(item => item.layer === node.layer);
+      const column = siblings.findIndex(item => item.id === node.id);
+      const p = flat ? { x: 20 + (width - 40) * (column + .5) / siblings.length, y: 30 + (height - 48) * (row + .5) / ARCH.layers.length, depth: 0 } : project({ x: node.x, z: node.z, y: layer.y });
+      const label = lines(node.name, cardWidth - 16);
+      const h = 57 + label.length * 14;
+      const box = { x: Math.max(5, Math.min(width - cardWidth - 5, p.x - cardWidth / 2)), y: Math.max(22, Math.min(height - h - 8, p.y - h / 2)), w: cardWidth, h };
+      return { ...p, node, label, box };
+    }).sort((a,b) => b.depth - a.depth);
+  }
+  function drawPlanes() {
+    for (const layer of [...ARCH.layers].reverse()) {
+      if (!enabled.has(layer.id)) continue;
+      const color = layer.color;
+      if (flat) {
+        const row = ARCH.layers.findIndex(item => item.id === layer.id);
+        const top = 30 + (height - 48) * row / ARCH.layers.length;
+        rounded(9, top, width - 18, (height - 48) / ARCH.layers.length - 7, 12);
+        ctx.globalAlpha = .055; ctx.fillStyle = color; ctx.fill(); ctx.globalAlpha = .2; ctx.strokeStyle = color; ctx.stroke(); ctx.globalAlpha = 1;
+        ctx.font = '10px system-ui, sans-serif'; ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.fillText(layer.name, 20, top + 13);
+        continue;
+      }
+      const corners = [[-330,-130],[330,-130],[330,130],[-330,130]].map(([x,z]) => project({x,z,y:layer.y+36}));
+      path(corners); ctx.globalAlpha = .075; ctx.fillStyle = color; ctx.fill(); ctx.globalAlpha = .34; ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.stroke();
+      for (let x = -240; x <= 240; x += 80) {
+        const a = project({x,y:layer.y+36,z:-130}), b = project({x,y:layer.y+36,z:130});
+        ctx.globalAlpha = .1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      }
+      for (let z = -65; z <= 65; z += 65) {
+        const a = project({x:-330,y:layer.y+36,z}), b = project({x:330,y:layer.y+36,z});
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+  function edgePoint(from, to) {
+    const center = { x: from.box.x + from.box.w / 2, y: from.box.y + from.box.h / 2 };
+    const target = { x: to.box.x + to.box.w / 2, y: to.box.y + to.box.h / 2 };
+    const dx = target.x - center.x, dy = target.y - center.y;
+    const factor = Math.min(from.box.w / 2 / Math.max(.01,Math.abs(dx)), from.box.h / 2 / Math.max(.01,Math.abs(dy)));
+    return { x: center.x + dx * factor, y: center.y + dy * factor };
+  }
+  function render(now = 0) {
+    if (!width || !height) return;
+    ctx.clearRect(0,0,width,height);
+    const glow = ctx.createRadialGradient(width*.52,height*.45,10,width*.52,height*.45,width*.7);
+    glow.addColorStop(0,'#193b2b'); glow.addColorStop(1,'#08120f'); ctx.fillStyle = glow; ctx.fillRect(0,0,width,height);
+    buildProjection(); drawPlanes();
+    const active = activeIds(), positions = new Map(projected.map(p => [p.node.id,p]));
+    ARCH.links.forEach((link,index) => {
+      const a = positions.get(link.from), b = positions.get(link.to); if (!a || !b) return;
+      const source = edgePoint(a,b), target = edgePoint(b,a);
+      const related = link.from === selected || link.to === selected;
+      const hot = !active || active.has(link.from) && active.has(link.to);
+      ctx.strokeStyle = related ? '#d3ffb9' : hot ? '#77b892' : '#40584c'; ctx.globalAlpha = related ? .9 : hot ? .5 : .3; ctx.lineWidth = related ? 1.8 : 1;
+      ctx.beginPath(); ctx.moveTo(source.x,source.y); ctx.lineTo(target.x,target.y); ctx.stroke();
+      const angle = Math.atan2(target.y-source.y,target.x-source.x);
+      ctx.beginPath(); ctx.moveTo(target.x,target.y); ctx.lineTo(target.x-7*Math.cos(angle-.45),target.y-7*Math.sin(angle-.45)); ctx.lineTo(target.x-7*Math.cos(angle+.45),target.y-7*Math.sin(angle+.45)); ctx.closePath(); ctx.fillStyle = ctx.strokeStyle; ctx.fill();
+      if (playing && hot) { const t = (now/2400+index*.11)%1; ctx.globalAlpha = 1; ctx.fillStyle = '#e3ffc5'; ctx.beginPath(); ctx.arc(source.x+(target.x-source.x)*t,source.y+(target.y-source.y)*t,2.6,0,Math.PI*2); ctx.fill(); }
+      ctx.globalAlpha = 1;
+    });
+    for (const p of projected) {
+      const node = p.node, b = p.box, color = layers.get(node.layer).color, chosen = node.id === selected;
+      const hot = !active || active.has(node.id);
+      ctx.globalAlpha = hot || chosen ? 1 : .58;
+      rounded(b.x,b.y+5,b.w,b.h,10); ctx.fillStyle = '#040b09'; ctx.fill();
+      ctx.shadowColor = chosen ? color : 'transparent'; ctx.shadowBlur = chosen ? 18 : 0;
+      rounded(b.x,b.y,b.w,b.h,10); ctx.fillStyle = chosen ? '#223d2e' : '#11251c'; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.strokeStyle = chosen ? '#dbffb8' : color; ctx.lineWidth = chosen ? 1.7 : .8; ctx.setLineDash(node.status === 'Futuro' ? [4,4] : []); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = color; ctx.globalAlpha *= .65; rounded(b.x+10,b.y+1,b.w-20,2,1); ctx.fill(); ctx.globalAlpha = hot || chosen ? 1 : .58;
+      const image = images.get(node.logo), logoX = b.x+b.w/2, logoY = b.y+23;
+      if (image?.complete && image.naturalWidth) {
+        rounded(logoX-19,logoY-18,38,36,7); ctx.fillStyle = '#0b1712'; ctx.fill();
+        const scale = Math.min(30/image.naturalWidth,28/image.naturalHeight);
+        ctx.drawImage(image,logoX-image.naturalWidth*scale/2,logoY-image.naturalHeight*scale/2,image.naturalWidth*scale,image.naturalHeight*scale);
+      } else {
+        rounded(logoX-17,logoY-16,34,32,8); ctx.fillStyle = '#253d2e'; ctx.fill(); ctx.strokeStyle = color; ctx.stroke();
+        ctx.font = '600 12px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#e3f5df';
+        ctx.fillText(node.logo ? (failures.has(node.logo) ? '!' : '…') : node.name.split(/\s+/).slice(0,2).map(word=>word[0]).join('').toUpperCase(),logoX,logoY+4);
+      }
+      ctx.font = '600 11px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#edf7e9';
+      p.label.forEach((line,index) => ctx.fillText(line,b.x+b.w/2,b.y+53+index*14));
+      ctx.globalAlpha = 1;
+    }
+    if (!projected.length) { ctx.font = '13px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#cedbce'; ctx.fillText('Ative uma camada para explorar o mapa.',width/2,height/2); }
+    text('node-count',`${projected.length} / ${ARCH.nodes.length}`);
+  }
+  function updateCaption() {
+    const current = ARCH.flows.find(item=>item.id===flow);
+    text('scene-title',current ? current.name : 'Arquitetura da operação');
+    text('scene-caption',(current ? current.description + ' ' : '') + (flat ? 'Vista 2D · selecione um componente.' : 'Arraste para girar · selecione um componente.') + (failures.size ? ` Logos indisponíveis: ${[...failures].join(', ')}.` : ''));
+  }
+  function list() {
+    const container = $('node-list'); container.replaceChildren();
+    const active = activeIds();
+    for (const node of ARCH.nodes.filter(node => visible(node) && normalize(`${node.name} ${node.subtitle || ''} ${node.description || ''}`).includes(query))) {
+      const el = button(node.name,() => select(node.id));
+      el.dataset.node = node.id; el.className = 'node-item' + (selected === node.id ? ' active' : ''); el.setAttribute('aria-pressed',String(selected===node.id));
+      if (active && !active.has(node.id)) el.classList.add('muted');
+      const subtitle = document.createElement('small'); subtitle.textContent = node.subtitle || layers.get(node.layer).name; el.append(subtitle); container.append(el);
+    }
+    if (!container.childElementCount) { const empty = document.createElement('p'); empty.textContent = 'Nenhum componente nesta busca ou nas camadas ativas.'; container.append(empty); }
+  }
+  function select(id) {
+    const node = nodes.get(id); if (!node) return;
+    selected = id;
+    text('detail-title',node.name); text('detail-description',node.description); text('detail-owner',node.owner); text('detail-limit',node.limit); text('detail-status',node.status); text('detail-stack',node.subtitle);
+    const image = $('detail-logo');
+    if (image) { image.hidden = !node.logo || failures.has(node.logo); image.alt = node.logo ? `Logo ${node.logo}` : ''; if (node.logo && LOGOS[node.logo]) image.src = LOGOS[node.logo]; else image.removeAttribute('src'); }
+    const container = $('detail-links'); container.replaceChildren();
+    ARCH.links.filter(link=>link.from===id||link.to===id).forEach(link => {
+      const other = nodes.get(link.from===id?link.to:link.from); if (!other) return;
+      const el = button(`${link.from===id?'→':'←'} ${other.name}${link.label?' · '+link.label:''}`,() => {
+        enabled.add(other.layer); updateLayerControls(); select(other.id);
+      }); container.append(el);
+    });
+    if (!container.childElementCount) container.textContent = 'Sem conexões declaradas.';
+    list(); render();
+  }
+  function updateLayerControls() {
+    $('layer-filters').querySelectorAll('input[data-layer]').forEach(input=>{input.checked=enabled.has(input.dataset.layer);});
+  }
+  function syncView() {
+    $('flat').setAttribute('aria-pressed',String(flat)); $('flat').textContent = flat ? 'Vista 3D' : 'Vista 2D';
+    for (const id of ['zoom-in','zoom-out']) { $(id).disabled = flat; $(id).title = flat ? 'Na vista 2D, a grade se ajusta à largura. Use a vista 3D para ampliar.' : ''; }
+    updateCaption(); render();
+  }
+  function pause() { playing = false; cancelAnimationFrame(frame); $('play').textContent = 'Animar fluxos'; $('play').setAttribute('aria-pressed','false'); render(); }
+  function animate(now) { if (!playing || document.hidden || reduced.matches) { pause(); return; } render(now); frame = requestAnimationFrame(animate); }
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect(); width = Math.max(1,rect.width); height = Math.max(560,rect.height || 640);
+    const ratio = Math.min(devicePixelRatio || 1,2); canvas.width = Math.round(width*ratio); canvas.height = Math.round(height*ratio); canvas.style.width = width+'px'; canvas.style.height = height+'px'; ctx.setTransform(ratio,0,0,ratio,0,0); render();
+  }
+  const flowContainer = $('flow-buttons'); flowContainer.replaceChildren();
+  for (const item of [{id:null,name:'Visão completa'},...ARCH.flows.filter(item=>item.id!=='all')]) {
+    const el = button(item.name,() => {
+      flow = item.id; flowContainer.querySelectorAll('button').forEach(b=>{const on=b===el; b.setAttribute('aria-pressed',String(on)); b.classList.toggle('active',on);});
+      updateCaption(); list(); render();
+    }); el.setAttribute('aria-pressed',String(item.id===null)); if(item.id===null)el.classList.add('active'); flowContainer.append(el);
+  }
+  $('layer-filters').replaceChildren();
+  for (const layer of ARCH.layers) {
+    const label = document.createElement('label'), input = document.createElement('input'), name = document.createElement('span');
+    input.type = 'checkbox'; input.checked = true; input.dataset.layer = layer.id; name.textContent = layer.name; label.append(input,name); $('layer-filters').append(label);
+    input.addEventListener('change',()=>{if(input.checked)enabled.add(layer.id);else enabled.delete(layer.id);list();render();});
+  }
+  $('search').addEventListener('input',event=>{query=normalize(event.target.value.trim());list();});
+  $('flat').addEventListener('click',()=>{flat=!flat;zoom=1;syncView();});
+  $('reset').addEventListener('click',()=>{yaw=-.26;pitch=.36;zoom=1;syncView();});
+  $('zoom-in').addEventListener('click',()=>{zoom=Math.min(1.5,zoom+.1);render();});
+  $('zoom-out').addEventListener('click',()=>{zoom=Math.max(.65,zoom-.1);render();});
+  $('play').setAttribute('aria-pressed','false');
+  $('play').addEventListener('click',()=>{if(playing){pause();return;}if(reduced.matches)return;playing=true;$('play').textContent='Pausar fluxos';$('play').setAttribute('aria-pressed','true');frame=requestAnimationFrame(animate);});
+  function motionPreference() { if(reduced.matches)pause();$('play').disabled=reduced.matches;$('play').title=reduced.matches?'Animação desativada pela preferência de movimento reduzido.':''; }
+  reduced.addEventListener('change',motionPreference); motionPreference();
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+  $('open-detail')?.addEventListener('click',()=>{$('detail-title').focus();$('detail-title').scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'nearest'});});
+  canvas.tabIndex = 0; canvas.setAttribute('role','img'); canvas.setAttribute('aria-label','Mapa da arquitetura. Use as setas, Home e End para selecionar componentes; Enter abre os detalhes. Arraste para girar a vista 3D.'); canvas.style.touchAction = 'pan-y';
+  canvas.addEventListener('keydown',event=>{
+    const order = ARCH.nodes.filter(visible); if (!order.length)return;
+    let index = order.findIndex(node=>node.id===selected);
+    if(['ArrowLeft','ArrowUp','ArrowRight','ArrowDown','Home','End'].includes(event.key)) {
+      event.preventDefault();
+      if(event.key==='Home')index=0;else if(event.key==='End')index=order.length-1;else index=(index+(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1)+order.length)%order.length;
+      select(order[index].id);
+    } else if(event.key==='Enter') {event.preventDefault();$('detail-title').focus();}
+    else if(['+','=','-'].includes(event.key)){event.preventDefault();zoom=Math.max(.65,Math.min(1.5,zoom+(event.key==='-'?-.1:.1)));render();}
+  });
+  $('node-list').addEventListener('keydown',event=>{
+    const buttons=[...$('node-list').querySelectorAll('button')], index=buttons.indexOf(document.activeElement); if(index<0)return;
+    let next=index;
+    if(event.key==='Home')next=0;else if(event.key==='End')next=buttons.length-1;else if(['ArrowDown','ArrowRight'].includes(event.key))next=(index+1)%buttons.length;else if(['ArrowUp','ArrowLeft'].includes(event.key))next=(index-1+buttons.length)%buttons.length;else return;
+    event.preventDefault();buttons[next].focus();
+  });
+  canvas.addEventListener('pointerdown',event=>{if(event.button!==0)return;drag={x:event.clientX,y:event.clientY,startX:event.clientX,startY:event.clientY,moved:false};canvas.setPointerCapture(event.pointerId);});
+  canvas.addEventListener('pointermove',event=>{if(!drag)return;const dx=event.clientX-drag.x,dy=event.clientY-drag.y;drag.moved ||= Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)>5;if(!flat && drag.moved){yaw=Math.max(-.65,Math.min(.65,yaw+dx*.004));pitch=Math.max(.05,Math.min(.6,pitch+dy*.003));render();}drag.x=event.clientX;drag.y=event.clientY;});
+  canvas.addEventListener('pointerup',event=>{if(drag&&!drag.moved){const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)*width/rect.width,y=(event.clientY-rect.top)*height/rect.height;const hit=[...projected].reverse().find(p=>x>=p.box.x&&x<=p.box.x+p.box.w&&y>=p.box.y&&y<=p.box.y+p.box.h);if(hit)select(hit.node.id);}drag=null;});
+  canvas.addEventListener('pointercancel',()=>{drag=null;}); canvas.addEventListener('lostpointercapture',()=>{drag=null;});
+  for (const key of new Set(ARCH.nodes.map(node=>node.logo).filter(Boolean))) {
+    const image = new Image(); images.set(key,image);
+    image.onload = ()=>render(); image.onerror = ()=>{failures.add(key);console.warn(`Logo indisponível: ${key}`);updateCaption();if(nodes.get(selected)?.logo===key)$('detail-logo').hidden=true;render();};
+    if (LOGOS[key]) image.src=LOGOS[key]; else { failures.add(key); console.warn(`Logo não fornecido: ${key}`); }
+  }
+  window.architectureView = Object.freeze({
+    get selected(){return selected;}, get flat(){return flat;}, get playing(){return playing;},
+    get projected(){return projected.map(p=>({id:p.node.id,x:p.x,y:p.y,box:{...p.box}}));},
+    get logoFailures(){return [...failures];}
+  });
+  new ResizeObserver(resize).observe(canvas.parentElement);
+  resize(); syncView(); select(selected);
+})();
+
+</script>
+<script>
+const presentButton=document.getElementById('present');
+function present(value){document.body.classList.toggle('present',value);presentButton.setAttribute('aria-pressed',String(value));presentButton.textContent=value?'Sair da apresentação':'Modo apresentação';}
+presentButton.onclick=()=>present(!document.body.classList.contains('present'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')present(false);});
+document.getElementById('download').onclick=async()=>{const button=document.getElementById('download'),status=document.getElementById('download-status');button.disabled=true;status.textContent='Preparando arquivo…';try{const copy=document.documentElement.cloneNode(true);copy.querySelector('#download').disabled=false;copy.querySelector('#download-status').textContent='';let html='<!doctype html>\n'+copy.outerHTML;for(const name of ['logos.js','architecture-data.js','scene.js']){const marker='<script src="'+name+'"></scr'+'ipt>';if(!html.includes(marker))continue;const r=await fetch(name);if(!r.ok)throw new Error('Arquivo indisponível');const source=(await r.text()).replace(/<\/script/gi,'<\\/script');html=html.replace(marker,()=>'<script>'+source+'</scr'+'ipt>');}const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='locacao-os-arquitetura-3d.html';link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);status.textContent='Arquivo preparado, com logos e interações.';}catch(error){status.textContent='Não foi possível baixar. Use a apresentação online.';}finally{button.disabled=false;}};
+</script>
+</body>
+</html>
